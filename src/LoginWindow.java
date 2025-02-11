@@ -1,16 +1,15 @@
 import java.awt.FlowLayout;
 import java.awt.event.*;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+//aaaaaaaaa
 public class LoginWindow extends JFrame {
     private JButton loginbtn;
-    private  JTextField username;
+    private JTextField username;
 
     public LoginWindow(){
         setTitle("login");
@@ -27,19 +26,21 @@ public class LoginWindow extends JFrame {
         login.add(new JLabel("Username:"));
         login.add(username);
         login.add(loginbtn);
-        setType(JFrame.Type.UTILITY);
         add(login);
         setVisible(true);
-
     } 
-
-    public String getUsername() {
-        return username.getText();
-    }
 
     public void addLoginListener(ActionListener listener) {
         loginbtn.addActionListener(listener);
     }
-    
-    
+
+    public void invalidUsername(){
+        JOptionPane.showInputDialog("Invalid username");
+    }
+
+    public void closeLoginWindow(){
+        this.dispose();
+    }
+
+
 }
