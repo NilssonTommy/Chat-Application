@@ -40,6 +40,14 @@ public class LoginWindow extends JFrame {
     public void addLoginListener(ActionListener listener) {
         loginbtn.addActionListener(listener);
     }
+
+    public void invalidUsername(){
+        JOptionPane.showInputDialog("Invalid username");
+    }
+
+    public void closeLoginWindow(){
+        this.dispose();
+    }
     
     
 }
