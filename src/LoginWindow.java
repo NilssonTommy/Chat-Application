@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-//aaaaaaaaa
+
 public class LoginWindow extends JFrame {
     private JButton loginbtn;
     private JTextField username;
@@ -42,5 +42,7 @@ public class LoginWindow extends JFrame {
         this.dispose();
     }
 
-
+    public String getUsername() {
+        return username.getText();
+    }
 }
