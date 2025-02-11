@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 
 public class LoginWindow extends JFrame {
     private JButton loginbtn;
+    private JTextField username;
 
     public LoginWindow(){
         setTitle("login");
@@ -22,7 +23,7 @@ public class LoginWindow extends JFrame {
         JPanel login = new JPanel();
         login.setLayout(new FlowLayout());
 
-        JTextField username = new JTextField(15);
+        username = new JTextField(15);
         loginbtn = new JButton("login");
         login.add(new JLabel("Username:"));
         login.add(username);
@@ -35,8 +36,13 @@ public class LoginWindow extends JFrame {
         loginbtn.addActionListener(listener);
     }
     
-    public static void main(String[] args) {
-        new LoginWindow();
+    public void invalidUsername(){
+        JOptionPane.showInputDialog("Invalid username");
     }
+
+    public void closeLoginWindow(){
+        this.dispose();
+    }
+
     
 }
