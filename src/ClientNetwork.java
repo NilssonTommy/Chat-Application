@@ -1,6 +1,6 @@
 public class ClientNetwork {
     
-    Boolean CheckUsername(String Username){
+    Boolean checkUsername(String Username){
        if(Username == "Tommy"){
         return true;
        }else {
