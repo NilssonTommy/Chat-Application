@@ -15,7 +15,8 @@ public class LoginEvent {
     }
 
     private void loginHandler(){
-        if(ClientNetwork.checkUsername(login.getUsername())){
+        ClientNetwork clientNetwork = ClientNetwork.getInstance();
+        if(clientNetwork.checkUsername(login.getUsername())){
             controller = new ChatClientController();
         }
         else
