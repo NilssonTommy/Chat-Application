@@ -6,7 +6,6 @@ import java.util.*;
 public class LoginEvent {
 
     private LoginWindow login;
-    private String username;
     private ChatClientController controller;
 
     public LoginEvent() {
