@@ -1,10 +1,19 @@
-public class ClientNetwork {
-    
+public final class ClientNetwork {
+    private static ClientNetwork instance;
+
+    private ClientNetwork() {
+
+    }
+
+
     Boolean checkUsername(String Username){
-       if(Username == "Tommy"){
-        return true;
-       }else {
-        return false;
-       }
+       return "tommy".equals(Username);
     };
+
+    public static ClientNetwork getInstance() {
+        if (instance == null){
+            instance = new ClientNetwork();
+        }
+        return instance;
+    }
 }
