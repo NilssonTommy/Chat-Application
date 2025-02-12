@@ -1,6 +1,11 @@
-public class ChatClientController {
+
+public class ChatClientController implements Observer {
     
     public ChatClientController(){
         
+    }
+
+    public void update(Object obj){
+        //Implementation senare
     }
 }
