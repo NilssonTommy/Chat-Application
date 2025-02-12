@@ -10,6 +10,16 @@ import javax.swing.JTextField;
 public class LoginWindow extends JFrame {
     private JButton loginbtn;
     private JTextField username;
+    
+    try{
+        PortalConnection c = new PortalConnection();
+ 
+     } catch (ClassNotFoundException e) {
+         System.err.println("ERROR!\nYou do not have the Postgres JDBC driver (e.g. postgresql-42.5.1.jar) in your runtime classpath!");
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+   }
 
     public LoginWindow(){
         setTitle("login");
