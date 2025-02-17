@@ -31,15 +31,94 @@ public class PortalConnection {
         conn = DriverManager.getConnection(db, props);
     }
 
-    public String login(String username) {
-        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO Users VALUES(?)")) {
+    public Boolean login(String username) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM Users WHERE username = ?")) {
             ps.setString(1, username);
-            ps.executeUpdate();
-            return "{\"success\": true, \"message\": \"User is now registered\"}";  // Fixed JSON format
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("Yes");
+                    return true;
+                } else {
+                    System.out.println("no");
+                    return false;
+                }
+            }
         } catch (SQLException e) {
-            return "{\"success\": false, \"error\": \"" + getError(e) + "\"}";  // Consistent JSON format
+            return false;
         }
     }
+    
+    public boolean createUser(String username) {
+        String checkUserSQL = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String insertUserSQL = "INSERT INTO Users (username) VALUES (?)";
+    
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkUserSQL)) {
+            checkStmt.setString(1, username);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("User already exists.");
+                    return false;  // Exit early if user exists
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking user existence.");
+            e.printStackTrace();
+            return false;
+        }
+    
+        // If the user does NOT exist, proceed to insert
+        try (PreparedStatement insertStmt = conn.prepareStatement(insertUserSQL)) {
+            insertStmt.setString(1, username);
+            int inserted = insertStmt.executeUpdate();
+    
+            if (inserted > 0) {
+                System.out.println("User created successfully.");
+                return true;
+            } else {
+                System.out.println("User creation failed.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error inserting user.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+
+    public boolean deleteUser(String username) {
+        String sql = "DELETE FROM Users WHERE username = ?";
+    
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username); 
+            int deleted = ps.executeUpdate(); 
+            System.out.println("Deleted");
+    
+            return deleted > 0; 
+        } catch (SQLException e) {
+            System.out.println("Failed to delete");
+            e.printStackTrace();  // Print error details
+            return false;  // Return false if an error occurs
+        }
+    }
+    
+    public boolean createRoom(String roomName) {
+        String sql = "INSERT INTO Rooms VALUES (?)";
+    
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username); 
+            int inserted = ps.executeUpdate(); 
+            System.out.println("Created");
+    
+            return inserted > 0; 
+        } catch (SQLException e) {
+            System.out.println("Failed to create user");
+            e.printStackTrace();  // Print error details
+            return false;  // Return false if an error occurs
+        }
+    }
+
+    
 
     public static String getError(SQLException e){
         String message = e.getMessage();

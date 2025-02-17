@@ -11,4 +11,5 @@ target/
 *.log
 
 # Ignorera Mac-specifika filer    
+
 .DS_Store
