@@ -1,0 +1,14 @@
+# Ignorera alla .class-filer
+*.class
+
+# Ignorera Maven "target/"-mappen (kompilerade filer, JAR:er, loggar)
+target/
+
+# Ignorera I VS Code-inställningar
+.vscode/
+
+# Ignorera loggar och tempfiler
+*.log
+
+# Ignorera Mac-specifika filer
+.DS_Store
