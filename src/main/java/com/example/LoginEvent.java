@@ -24,10 +24,9 @@ public class LoginEvent {
         */
         try {
         PortalConnection PC = PortalConnection.getInstance();
-        PC.login("Patrick");
-        System.out.println("Success");
+        PC.login(login.getUsername());
          } catch (Exception e) {
-            System.out.println("Fail");
+            login.invalidUsername();
             e.printStackTrace();
          }
       }
