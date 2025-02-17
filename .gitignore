@@ -10,5 +10,5 @@ target/
 # Ignorera loggar och tempfiler
 *.log
 
-# Ignorera Mac-specifika filer
+# Ignorera Mac-specifika filer    
 .DS_Store
