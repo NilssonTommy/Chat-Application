@@ -35,7 +35,7 @@ public class LoginWindow extends JFrame {
     }
 
     public void invalidUsername(){
-        JOptionPane.showInputDialog("Invalid username");
+        JOptionPane.showInputDialog(null, "Invalid username");
     }
 
     public void closeLoginWindow(){
