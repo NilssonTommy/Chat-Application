@@ -45,6 +45,7 @@ public class LoginWindow extends JFrame {
     }
 
     public void invalidUsername(){
+
         JOptionPane.showMessageDialog(null,"Invalid username");
     }
 
