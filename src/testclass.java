@@ -1,7 +1,9 @@
 import java.io.File;
 
 import javax.imageio.ImageIO;
-
+/**
+ * Testklass för att testa guin.
+ */
 public class testclass{
 
     public static void main(String[] arg) throws Exception{
