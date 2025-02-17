@@ -36,9 +36,14 @@ public class LoginWindow extends JFrame {
         loginbtn.addActionListener(listener);
     }
 
+    
+    public void validUsername(){
+
+        JOptionPane.showMessageDialog(null,"Login authentication success");
+    }
     public void invalidUsername(){
 
-        JOptionPane.showMessageDialog(null,"Invalid username");
+        JOptionPane.showMessageDialog(null,"Login authentication failed");
     }
 
     public void closeLoginWindow(){
