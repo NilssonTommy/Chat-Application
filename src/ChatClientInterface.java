@@ -2,7 +2,9 @@ import java.util.*;
 
 public interface ChatClientInterface {
 
-    List<String> getChatRooms();
+    List<String> getChatrooms();
     String getUsername();
+    void setChatrooms(List<String> chatrooms);
+    void addChatroom(String chatroom);
     
 }
