@@ -106,7 +106,7 @@ public class PortalConnection {
         String sql = "INSERT INTO Rooms VALUES (?)";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username); 
+            ps.setString(1, roomName); 
             int inserted = ps.executeUpdate(); 
             System.out.println("Created");
     

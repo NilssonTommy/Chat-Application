@@ -1,4 +1,4 @@
-package main.java.com.example;
+package com.example;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 

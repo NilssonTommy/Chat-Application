@@ -1,5 +1,4 @@
-package main.java.com.example;
-
+package com.example;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;

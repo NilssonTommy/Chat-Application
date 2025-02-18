@@ -1,4 +1,4 @@
-package main.java.com.example;
+package com.example;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
