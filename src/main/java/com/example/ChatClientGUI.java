@@ -1,3 +1,4 @@
+package com.example;
 public class ChatClientGUI {
     ChatClientInterface model;
     public ChatClientGUI(ChatClientInterface model){

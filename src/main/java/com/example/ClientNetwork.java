@@ -1,3 +1,4 @@
+package com.example;
 public final class ClientNetwork {
     private static ClientNetwork instance;
 

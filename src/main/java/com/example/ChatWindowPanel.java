@@ -1,3 +1,4 @@
+package main.java.com.example;
 
 import java.awt.Color;
 import java.awt.Container;

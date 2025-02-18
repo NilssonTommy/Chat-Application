@@ -1,3 +1,4 @@
+package com.example;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import javax.swing.JButton;
@@ -10,6 +11,7 @@ import javax.swing.JTextField;
 public class LoginWindow extends JFrame {
     private JButton loginbtn;
     private JTextField username;
+    
 
     public LoginWindow(){
         setTitle("login");
@@ -34,8 +36,14 @@ public class LoginWindow extends JFrame {
         loginbtn.addActionListener(listener);
     }
 
+    
+    public void validUsername(){
+
+        JOptionPane.showMessageDialog(null,"Login authentication success");
+    }
     public void invalidUsername(){
-        JOptionPane.showMessageDialog(null,"Invalid username");
+
+        JOptionPane.showMessageDialog(null,"Login authentication failed");
     }
 
     public void closeLoginWindow(){
@@ -46,3 +54,4 @@ public class LoginWindow extends JFrame {
         return username.getText();
     }
 }
+

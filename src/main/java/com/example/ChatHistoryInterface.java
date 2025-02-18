@@ -1,3 +1,4 @@
+package com.example;
 import java.util.*;
 public interface ChatHistoryInterface{
     public void addMessage(Message msg);

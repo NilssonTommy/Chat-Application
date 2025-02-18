@@ -1,3 +1,4 @@
+package main.java.com.example;
 import javax.swing.*;
 
 
