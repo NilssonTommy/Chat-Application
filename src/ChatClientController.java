@@ -18,7 +18,7 @@ public class ChatClientController implements Observer {
         clientNetwork.addObserver(this);
         model = new ChatClientModel(username);
         gui = new ChatClientGUI(model);
-        System.out.println("ChatClientController skapad för användare: " + username); // Felsökning/check
+        System.out.println("ChatClientController skapad för användare: " + username);
     }
 
     /**
@@ -29,9 +29,9 @@ public class ChatClientController implements Observer {
     public void onRoomSelected(String roomName) {
         if (model.getChatrooms().contains(roomName)) {
             ChatRoomController chatRoomController = new ChatRoomController(roomName, clientNetwork);
-            System.out.println("Chattrum valt: " + roomName); // Felsökning/check
+            System.out.println("Chattrum valt: " + roomName); 
         } else {
-            System.out.println("Fel: Chattrum " + roomName + " existerar inte"); // Felsökning/check
+            System.out.println("Fel: Chattrum " + roomName + " existerar inte");
         }
     }
 
@@ -63,9 +63,9 @@ public class ChatClientController implements Observer {
         if (gui != null) {
             gui.show();
             gui.setRoomSelectionListener(roomName -> onRoomSelected(roomName));
-            System.out.println("ChatClientGUI startat."); // Felsökning/check
+            System.out.println("ChatClientGUI startat.");
         } else {
-            System.out.println("Fel: GUI:t är inte initierat."); // Felsökning/check
+            System.out.println("Fel: GUI:t är inte initierat.");
         }
     }
 
