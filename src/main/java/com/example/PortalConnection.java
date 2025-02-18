@@ -48,25 +48,10 @@ public class PortalConnection {
         }
     }
     
+    
     public boolean createUser(String username) {
-        String checkUserSQL = "SELECT COUNT(*) FROM Users WHERE username = ?";
         String insertUserSQL = "INSERT INTO Users (username) VALUES (?)";
     
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkUserSQL)) {
-            checkStmt.setString(1, username);
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    System.out.println("User already exists.");
-                    return false;  // Exit early if user exists
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error checking user existence.");
-            e.printStackTrace();
-            return false;
-        }
-    
-        // If the user does NOT exist, proceed to insert
         try (PreparedStatement insertStmt = conn.prepareStatement(insertUserSQL)) {
             insertStmt.setString(1, username);
             int inserted = insertStmt.executeUpdate();
@@ -74,15 +59,14 @@ public class PortalConnection {
             if (inserted > 0) {
                 System.out.println("User created successfully.");
                 return true;
-            } else {
-                System.out.println("User creation failed.");
-                return false;
             }
+        } catch (SQLIntegrityConstraintViolationException e) {  // Catch duplicate username error
+            System.out.println("User already exists.");
         } catch (SQLException e) {
             System.out.println("Error inserting user.");
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
     
 
@@ -101,8 +85,8 @@ public class PortalConnection {
             return false;  // Return false if an error occurs
         }
     }
-    
-    public boolean createRoom(String roomName) {
+    /* 
+    public boolean createRoom(String roomName, String username) {
         String sql = "INSERT INTO Rooms VALUES (?)";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -116,8 +100,8 @@ public class PortalConnection {
             e.printStackTrace();  // Print error details
             return false;  // Return false if an error occurs
         }
-    }
-
+    } ---------------------Nästa gång lägg ett sätt så man även skriver vem som skapade rummet
+*/ 
     
 
     public static String getError(SQLException e){
