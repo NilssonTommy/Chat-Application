@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
  * Testklass för att testa guin.
  */
 public class testclass{
-
+    /* 
     public static void main(String[] arg) throws Exception{
         ChatroomBuilder builder = new BasicChatroomBuilder();
         ChatroomDirector director = new ChatroomDirector();
@@ -33,5 +33,5 @@ public class testclass{
         //gui.chatwindow.setPreferredSize(gui.chatwindow.getPreferredSize());
         //gui.getChatwindow().addGlue();
         //gui.getChatwindow().addText("101010101010101010");
-    }
+     }*/
 }
