@@ -1,9 +1,5 @@
 package com.example;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Image;
-
+import java.awt.*;
 import javax.swing.*;
 
 public class ChatWindowPanel extends JPanel implements Observer{
@@ -33,6 +29,7 @@ public class ChatWindowPanel extends JPanel implements Observer{
             revalidate();
         }
     }
+    /* 
     public void addText(String text){
         add(Box.createRigidArea(verticalSpace));
         name = new JTextArea("Test:");
@@ -55,5 +52,5 @@ public class ChatWindowPanel extends JPanel implements Observer{
         add(Box.createVerticalBox());
         repaint();
         revalidate();
-    }
+    }*/
 }
