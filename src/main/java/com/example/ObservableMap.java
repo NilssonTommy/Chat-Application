@@ -5,13 +5,13 @@ import java.util.*;
  * Observable class which handles different types of observers. 
  * Each type of observer is identified by a key when adding, removing och updating.
  */
-public class ObservableChatroom {
+public class ObservableMap {
     private HashMap<String, List<Observer>> observerMap;
     private List<Observer> observers;
     /**
      * Constructor to set up an empty Hash map.
      */
-    public ObservableChatroom(){
+    public ObservableMap(){
         observerMap = new HashMap<>();
     }
     /**
