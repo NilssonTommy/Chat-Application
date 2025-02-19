@@ -18,8 +18,8 @@ public class ChatClientController implements Observer {
     public ChatClientController(String username) {
         this.clientNetwork = ClientNetwork.getInstance();
         clientNetwork.addObserver(this);
-        model = new ChatClientModel(username);
-        gui = new ChatClientGUI(model);
+        this.model = new ChatClientModel(username);
+        this.gui = new ChatClientGUI(model);
         System.out.println("ChatClientController skapad för användare: " + username);
     }
 
