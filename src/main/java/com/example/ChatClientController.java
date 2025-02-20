@@ -9,7 +9,7 @@ public class ChatClientController implements Observer {
     private ChatClientModel model; // Referens till användarens data.
     private ChatClientGUI gui; // Referens till GUI som visar användarens gränssnitt efter inloggning.
     private ClientNetwork clientNetwork; // Singleton-instansen av ClientNetwork.
-
+ 
     /**
      * Konstruktor som tar emot ett validerat användarnamn från LoginController.
      * Skapar ChatClientModel och ChatClientGUI.
@@ -17,7 +17,7 @@ public class ChatClientController implements Observer {
      */
     public ChatClientController(String username) {
         this.clientNetwork = ClientNetwork.getInstance();
-        clientNetwork.addObserver(this);
+        //clientNetwork.addObserver(this);
         model = new ChatClientModel(username);
         gui = new ChatClientGUI(model);
         System.out.println("ChatClientController skapad för användare: " + username);
@@ -63,8 +63,8 @@ public class ChatClientController implements Observer {
      */
     public void startGUI() {
         if (gui != null) {
-            gui.show();
-            gui.setRoomSelectionListener(roomName -> onRoomSelected(roomName));
+           // gui.show();
+            //gui.setRoomSelectionListener(roomName -> onRoomSelected(roomName));
             System.out.println("ChatClientGUI startat.");
         } else {
             System.out.println("Fel: GUI:t är inte initierat.");
@@ -84,7 +84,7 @@ public class ChatClientController implements Observer {
                 String newRoomName = notification.substring(8);
                 model.addChatroom(newRoomName);
                 if (gui != null) {
-                    gui.refresh();
+                   // gui.refresh();
                 }
                 System.out.println("Nytt rum tillagt i modellen och GUI: " + newRoomName);
             }
