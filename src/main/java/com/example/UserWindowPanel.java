@@ -23,9 +23,10 @@ public class UserWindowPanel extends JPanel implements Observer{
             revalidate();
         }
     }
+    /* 
     public void addText(String text){
         add(new JTextArea(text));
         repaint();
         revalidate();
-    }
+    } */
 }
