@@ -59,8 +59,21 @@ public class testclass{
             if (returnval == JFileChooser.APPROVE_OPTION){
                 File file = fc.getSelectedFile();
                 try {
-                    BufferedImage img = ImageIO.read(file);
-                    gui.getChatwindow().update(new ImageMessage("Bilder", img));
+                    SwingUtilities.invokeLater(() ->{
+                        BufferedImage img;
+                        try {
+                            img = ImageIO.read(file);
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                            return;
+                        }
+                        gui.getChatwindow().update(new ImageMessage("Bilder", img));
+                        SwingUtilities.invokeLater(() ->{
+                            gui.getChatwindow().revalidate();
+                        });
+                    });
+
                 } catch(Exception e2){
                     JOptionPane.showMessageDialog(null, "Oväntat fel inträffade.", "Varning!", JOptionPane.PLAIN_MESSAGE);
                 }
