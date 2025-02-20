@@ -33,5 +33,4 @@ public class BasicChatroomBuilder implements ChatroomBuilder {
     public ChatroomGUI getResult(){
         return new ChatroomGUI(chatscroller, userscroll, chatwindow, userwindow, sendbutton, imagebutton, textfield);
     }
-
 }
