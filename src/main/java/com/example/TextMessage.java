@@ -1,7 +1,7 @@
 package com.example;
 import java.sql.Timestamp;
 
-public class TextMessage {
+public class TextMessage implements Message{
     private String author;
     private Timestamp timestamp;
     private String text;

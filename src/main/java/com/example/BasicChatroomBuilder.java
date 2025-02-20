@@ -3,11 +3,11 @@ import javax.swing.*;
 
 
 public class BasicChatroomBuilder implements ChatroomBuilder {
-    JScrollPane chatscroller, userscroll;
-    ChatWindowPanel chatwindow;
-    JButton sendbutton, imagebutton;
-    JTextField textfield;
-    UserWindowPanel userwindow;
+    private JScrollPane chatscroller, userscroll;
+    private ChatWindowPanel chatwindow;
+    private JButton sendbutton, imagebutton;
+    private JTextField textfield;
+    private UserWindowPanel userwindow;
 
     public void createChatWindow(ChatWindowPanel chatwindow){
         this.chatwindow = chatwindow;

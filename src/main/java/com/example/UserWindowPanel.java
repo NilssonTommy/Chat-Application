@@ -1,32 +1,42 @@
 package com.example;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
 public class UserWindowPanel extends JPanel implements Observer{
-    ChatroomInterface chatroom;
-    JTextArea name;
+    private List<String> users;
+    private JLabel invisisblelabel;
+    private GridBagConstraints maingbc, invisiblegbc;
     public UserWindowPanel(){
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        setPreferredSize(new Dimension(50,300));
-        add(Box.createVerticalGlue());
+        setLayout(new GridBagLayout());
+        maingbc = new GridBagConstraints();
+        invisiblegbc = new GridBagConstraints();
+        maingbc.weightx = 1;
+        maingbc.anchor = GridBagConstraints.WEST;
+        maingbc.gridwidth = GridBagConstraints.REMAINDER;
+        invisiblegbc.weighty = 1;
+        invisisblelabel = new JLabel();
+        invisisblelabel.setPreferredSize(new Dimension(50,10));
+        add(invisisblelabel);
     }
     public void update(Object obj){
-        chatroom = (ChatroomInterface)obj;
-        removeAll();
-        for(String u : chatroom.getUsers()){
-            name = new JTextArea(u);
-            name.setEditable(false);
-            add(name);
-            repaint();
+        if(obj instanceof List){
+            @SuppressWarnings("unchecked")
+            List<String> users = (List<String>)obj;
+            removeAll();
+            for(String u : users){
+                add(new JLabel(u), maingbc);
+            }
+            add(invisisblelabel, invisiblegbc);
+            revalidate();
+        } else if (obj instanceof String){
+            String name = (String)obj;
+            remove(invisisblelabel);
+            add(new JLabel(name), maingbc);
+            add(invisisblelabel, invisiblegbc);
             revalidate();
         }
     }
-    /* 
-    public void addText(String text){
-        add(new JTextArea(text));
-        repaint();
-        revalidate();
-    } */
 }

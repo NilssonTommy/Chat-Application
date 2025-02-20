@@ -5,12 +5,12 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class ChatroomGUI extends JFrame {
-    JScrollPane chatscroll, userscroll;
-    ChatWindowPanel chatwindow;
-    JButton sendbutton, imagebutton;
-    JTextField textfield;
-    UserWindowPanel userwindow;
-    JPanel bottompanel, centerpanel;
+    private JScrollPane chatscroll, userscroll;
+    private ChatWindowPanel chatwindow;
+    private JButton sendbutton, imagebutton;
+    private JTextField textfield;
+    private UserWindowPanel userwindow;
+    private JPanel bottompanel, centerpanel;
     private int prevmax_chat, prevmax_user;
     public ChatroomGUI(JScrollPane chatscroll, JScrollPane userscroll, ChatWindowPanel chatwindow, 
             UserWindowPanel userwindow, JButton sendbutton, JButton imagebutton, JTextField textfield){
@@ -35,7 +35,7 @@ public class ChatroomGUI extends JFrame {
         bottompanel.setLayout(new FlowLayout());
         bottompanel.add(imagebutton);bottompanel.add(textfield);bottompanel.add(sendbutton);
         add(bottompanel, BorderLayout.SOUTH);
-        setTitle("test");
+        setTitle("Chatroom");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setVisible(true);
