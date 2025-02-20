@@ -1,4 +1,5 @@
 package com.example;
+import java.util.List;
 
 /**
  * ChatClientController hanterar användarens session efter inloggning.
@@ -7,12 +8,13 @@ package com.example;
 public class ChatClientController implements Observer {
     
     private ChatClientModel model; // Referens till användarens data.
-    private ChatClientGUI gui; // Referens till GUI som visar användarens gränssnitt efter inloggning.
+    private ChatClientGUI gui; // Användargränssnitt efter inloggning.
     private ClientNetwork clientNetwork; // Singleton-instansen av ClientNetwork.
  
     /**
      * Konstruktor som tar emot ett validerat användarnamn från LoginController.
-     * Skapar ChatClientModel och ChatClientGUI.
+     * Initierar ChatClientModel och ChatClientGUI.
+     * Registrerar ChatClientController som en observer till ClientNetwork.
      * @param username Användarnamnet för den inloggade användaren.
      */
     public ChatClientController(String username) {
@@ -36,7 +38,7 @@ public class ChatClientController implements Observer {
      */
     public void onRoomSelected(String roomName) {
         if (model.getChatrooms().contains(roomName)) {
-            ChatRoomController chatRoomController = new ChatRoomController(roomName, clientNetwork);
+            ChatroomController chatRoomController = new ChatroomController(roomName);
             System.out.println("Chattrum valt: " + roomName); 
         } else {
             System.out.println("Fel: Chattrum " + roomName + " existerar inte");
@@ -83,17 +85,32 @@ public class ChatClientController implements Observer {
      */
     @Override
     public void update(Object obj) {
-        if (obj instanceof String) {
-            String notification = (String) obj;
-            System.out.println("Notifiering mottagen: " + notification);
-            if (notification.startsWith("NewRoom:")) {
-                String newRoomName = notification.substring(8);
-                model.addChatroom(newRoomName);
-                if (gui != null) {
-                   // gui.refresh();
+        if (obj instanceof List<?>) { // Kontrollerar om objektet är en lista av något slag.
+            List<?> rawList = (List<?>) obj; // Typecastar till en okänd typ av lista.
+        
+            // Checka om alla element är en sträng
+            boolean allStrings = true;
+            for (Object element : rawList) {
+                if (!(element instanceof String)) {
+                    allStrings = false;
+                    break;
                 }
-                System.out.println("Nytt rum tillagt i modellen och GUI: " + newRoomName);
+            } 
+
+            if (allStrings) {
+                // "Undertryck" varningar eftersom vi hävdar att listan innehåller strängar
+                @SuppressWarnings("unchecked")
+                List<String> stringList = (List<String>) rawList;
+    
+                // Nu kan vi använda stringList om en List<String>
+                System.out.println("List contains: " + stringList); // Debug
+            } else {
+                System.out.println("The list is not a List<String>"); // Debug
             }
+        } else {
+            System.out.println("Object is not a List at all."); // Debug
         }
+
+        // gui.refresh(); Behöver fixas efter att GUI:t är implementerat
     }
 }
