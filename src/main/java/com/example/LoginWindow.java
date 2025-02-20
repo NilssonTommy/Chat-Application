@@ -38,7 +38,6 @@ public class LoginWindow extends JFrame {
 
     
     public void validUsername(){
-
         JOptionPane.showMessageDialog(null,"Login authentication success");
     }
     public void invalidUsername(){
