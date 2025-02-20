@@ -54,7 +54,7 @@
                 </executions>
                 <configuration>
                     <!-- Specify the correct main class for JavaFX -->
-                    <mainClass>com.example.Main</mainClass> <!-- Change this if your main class is different -->
+                    <mainClass>com.example.TestConnection</mainClass> <!-- Change this if your main class is different -->
                 </configuration>
             </plugin>
 
@@ -71,7 +71,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.example.Main</mainClass>
+                    <mainClass>com.example.TestConnection</mainClass>
                 </configuration>
             </plugin>
         </plugins>
