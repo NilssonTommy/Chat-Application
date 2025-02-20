@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ChatroomGUI extends JFrame {
+public class ChatroomGUI extends JFrame{
     private JScrollPane chatscroll, userscroll;
     private ChatWindowPanel chatwindow;
     private JButton sendbutton, imagebutton;
@@ -61,7 +61,12 @@ public class ChatroomGUI extends JFrame {
                   
             }
         });
+        textfield.addActionListener(e->{
+            sendbutton.setEnabled(true);
+            sendbutton.setEnabled(false);
+        });
     }
+
     public ChatWindowPanel getChatwindow(){
         return chatwindow;
     }
