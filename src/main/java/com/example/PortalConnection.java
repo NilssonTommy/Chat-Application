@@ -50,7 +50,7 @@ public class PortalConnection {
     
     
     public boolean createUser(String username) {
-        String insertUserSQL = "INSERT INTO Users (username) VALUES (?)";
+        String insertUserSQL = "INSERT INTO Users (username, status) VALUES (?, 1)";
     
         try (PreparedStatement insertStmt = conn.prepareStatement(insertUserSQL)) {
             insertStmt.setString(1, username);
@@ -85,23 +85,26 @@ public class PortalConnection {
             return false;  // Return false if an error occurs
         }
     }
-    /* 
-    public boolean createRoom(String roomName, String username) {
-        String sql = "INSERT INTO Rooms VALUES (?)";
+     
+    public boolean createRoom(String username, String RoomName) {
+        String sql = "INSERT INTO Rooms(UserID, RoomName) VALUES (?, ?)";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomName); 
+            ps.setString(1, RoomName); 
             int inserted = ps.executeUpdate(); 
-            System.out.println("Created");
+            System.out.println("Created Room");
     
             return inserted > 0; 
         } catch (SQLException e) {
-            System.out.println("Failed to create user");
+            System.out.println("Failed to create Room");
             e.printStackTrace();  // Print error details
             return false;  // Return false if an error occurs
         }
-    } ---------------------Nästa gång lägg ett sätt så man även skriver vem som skapade rummet
-*/ 
+    } 
+    
+
+    //Metod saknas för att hämta chathistorik, och clientlist. Finns redan vy för detta så jag kan använda samma select.
+
     
 
     public static String getError(SQLException e){
