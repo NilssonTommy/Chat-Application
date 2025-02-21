@@ -20,13 +20,26 @@ public class ObservableMap {
      * @param obs The observer that should be added
      * @throws NullPointerException - if the specified obs is null and this list does not permit null elements
      */
+
+    /* 
     public void addSubscriber(String key, Observer obs){
         observers = observerMap.get(key);
         if(observers == null){
             observers = new LinkedList<>();
         }
         observers.add(obs);
+    } */
+
+public void addSubscriber(String key, Observer obs){
+    List<Observer> observers = observerMap.get(key);
+    if(observers == null){
+        observers = new LinkedList<>();
+        observerMap.put(key, observers); // Ny rad
     }
+    observers.add(obs);
+}
+
+
     /**
      * Removes an observer from the list corresponding to a certain key.
      * @param key The key to map a type of observer
