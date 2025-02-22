@@ -1,15 +1,15 @@
 package com.example;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.*;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.awt.Cursor;
+
+//Kommer att fixa design på layout nu så det ser snyggare ut
 
 public class LoginWindow extends JFrame {
-    private JButton loginbtn;
+    private JButton LoginButton;
+    private JLabel RegisterButton;
     private JTextField username;
     
 
@@ -21,24 +21,42 @@ public class LoginWindow extends JFrame {
         setResizable(false);
 
         JPanel login = new JPanel();
-        login.setLayout(new FlowLayout());
+        login.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         username = new JTextField(15);
-        loginbtn = new JButton("login");
+        LoginButton = new JButton("Login");
+
+        RegisterButton = new JLabel("<html><u>Register</u></html>");
+        RegisterButton.setForeground(Color.BLUE);
+        RegisterButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        RegisterButton.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    RegisterButton.setForeground(new Color(0, 0, 139)); // Change color when clicked
+                }
+
+                public void mouseReleased(MouseEvent e) {
+                    RegisterButton.setForeground(Color.BLUE); // Change back when released
+                }
+            });
+
         login.add(new JLabel("Username:"));
         login.add(username);
-        login.add(loginbtn);
+        login.add(LoginButton);
+        login.add(RegisterButton);
         add(login);
         setVisible(true);
     } 
 
     public void addLoginListener(ActionListener listener) {
-        loginbtn.addActionListener(listener);
+        LoginButton.addActionListener(listener);
     }
 
+    public void addRegisterListener(MouseListener listener) {
+        RegisterButton.addMouseListener(listener);
+    }
     
     public void validUsername(){
-
         JOptionPane.showMessageDialog(null,"Login authentication success");
     }
     public void invalidUsername(){

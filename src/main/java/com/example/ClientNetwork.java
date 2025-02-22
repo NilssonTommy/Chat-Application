@@ -6,7 +6,6 @@ public final class ClientNetwork {
 
     }
 
-
     Boolean checkUsername(String Username){
        return "tommy".equals(Username);
     };
@@ -16,5 +15,13 @@ public final class ClientNetwork {
             instance = new ClientNetwork();
         }
         return instance;
+    }
+
+    /**
+     * Metod som skickar meddelandet från ChatroomController vidare till servern.
+     * @param messageText Meddelandet som användaren skickat.
+     */
+    public void sendMessage(String messageText){
+        // Skall implementeras
     }
 }

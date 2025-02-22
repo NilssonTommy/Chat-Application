@@ -9,5 +9,11 @@ public class TestConnection {
         } else {
             System.out.println("❌ Failed to connect!");
         }
+
+        db.login("Patrick");
+        db.createUser("Patrick");
+        db.createUser("Tabort2");
+        db.createUser("Tabort");
+        db.deleteUser("Tabort");
     }
 }
