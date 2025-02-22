@@ -1,9 +1,8 @@
 package com.example;
 public class Main {
 
-
     public static void main(String[] args) {
-       //new LoginEvent();
-       new TestConnection();
+        ClientNetwork.getInstance();
+        new LoginController();
     }
 }
