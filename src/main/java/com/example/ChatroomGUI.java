@@ -62,8 +62,7 @@ public class ChatroomGUI extends JFrame{
             }
         });
         textfield.addActionListener(e->{
-            sendbutton.setEnabled(true);
-            sendbutton.setEnabled(false);
+            sendbutton.doClick();
         });
     }
 
