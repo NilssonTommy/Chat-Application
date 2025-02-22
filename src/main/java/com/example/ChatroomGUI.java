@@ -61,6 +61,7 @@ public class ChatroomGUI extends JFrame{
                   
             }
         });
+        //Actionlistener in order to send Message using "ENTER"
         textfield.addActionListener(e->{
             sendbutton.doClick();
         });
