@@ -1,56 +1,56 @@
 package com.example;
 import java.awt.*;
+
 import javax.swing.*;
 
 public class ChatWindowPanel extends JPanel implements Observer{
     private ChatHistoryInterface chatlog;
-    private JTextArea name;
-    private Dimension verticalSpace = new Dimension(0,5);
+    private Message msg;
+    private JPanel panel;
+    private JPanel invisiblepanel;
+    private GridBagConstraints maingbc, invisiblegbc;
     public ChatWindowPanel(){
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(Box.createVerticalGlue());
-
+        /* setLayout(new GridBagLayout());
+        maingbc = new GridBagConstraints();
+        invisiblegbc = new GridBagConstraints();
+        maingbc.weightx = 1;
+        maingbc.anchor = GridBagConstraints.WEST;
+        maingbc.gridwidth = GridBagConstraints.REMAINDER;
+        invisiblegbc.weighty = 1; */
+        //invisiblepanel = new JPanel();
+        //add(Box.createVerticalGlue());
     }
     public void update(Object obj){
-        chatlog = (ChatHistoryInterface)obj;
-        removeAll();
-        for(Message m: chatlog.getHistory()){
-            add(Box.createRigidArea(verticalSpace));
-            name = new JTextArea(m.getAuthor() + ":");
-            name.setBackground(getBackground());
-            name.setEditable(false);
-            if (m instanceof TextMessage){
-                this.add(new TextPanel(((TextMessage)m).getContent()) );
-            } else if (m instanceof ImageMessage){
-                this.add(new ImagePanel(((ImageMessage)m).getContent()));
+        if (obj instanceof ChatHistoryInterface){
+            chatlog = (ChatHistoryInterface)obj;
+            removeAll();
+            for(Message m: chatlog.getHistory()){
+                if (m instanceof TextMessage){
+                    panel = new TextPanel(((TextMessage)m)); 
+                    add(panel);
+                } else if (m instanceof ImageMessage){
+                    panel = new ImagePanel(((ImageMessage)m));
+                    add(panel);
+                }
+                
+                revalidate();
             }
-            add(Box.createRigidArea(verticalSpace));
+        } else if(obj instanceof Message){
+            msg = (Message)obj;
+            //remove(invisiblepanel);
+            if (msg instanceof TextMessage){
+                panel = new TextPanel(((TextMessage)msg));
+                add(panel);
+            } else if (msg instanceof ImageMessage){
+                panel = new ImagePanel(((ImageMessage)msg));
+                add(panel);
+            }
+            //setPreferredSize(new Dimension(getWidth(), getHeight()+panel.getHeight()));
+            //add(invisiblepanel, invisiblegbc);
             repaint();
             revalidate();
+            
         }
     }
-    /* 
-    public void addText(String text){
-        add(Box.createRigidArea(verticalSpace));
-        name = new JTextArea("Test:");
-        name.setBackground(getBackground());
-        name.setEditable(false);
-        add(name);
-        add(new TextPanel(text));
-        add(Box.createRigidArea(verticalSpace));
-        repaint();
-        revalidate();
-    }
-    public void addImg(Image img){
-        add(Box.createRigidArea(verticalSpace));
-        name = new JTextArea("Test:");
-        name.setBackground(getBackground());
-        name.setEditable(false);
-        add(name);
-        add(new ImagePanel(img));
-        add(Box.createRigidArea(verticalSpace));
-        add(Box.createVerticalBox());
-        repaint();
-        revalidate();
-    }*/
 }
