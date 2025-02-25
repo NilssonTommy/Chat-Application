@@ -1,5 +1,8 @@
 package com.example;
 import java.sql.*; // JDBC stuff.
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 public class PortalConnection {
@@ -90,10 +93,10 @@ public class PortalConnection {
         String sql = "INSERT INTO Rooms(UserID, RoomName) VALUES (?, ?)";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, RoomName); 
+            ps.setString(1, username); 
+            ps.setString(2, RoomName);
             int inserted = ps.executeUpdate(); 
             System.out.println("Created Room");
-    
             return inserted > 0; 
         } catch (SQLException e) {
             System.out.println("Failed to create Room");
@@ -101,11 +104,95 @@ public class PortalConnection {
             return false;  // Return false if an error occurs
         }
     } 
-    
 
-    //Metod saknas för att hämta chathistorik, och clientlist. Finns redan vy för detta så jag kan använda samma select.
+    public Boolean selectRoom(String roomName) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM Rooms WHERE RoomName = ?")) {
+            ps.setString(1, roomName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("Room Exists");
+                    return true;
+                } else {
+                    System.out.println("Room does not exist");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 
+   public List<String> getChatrooms(String username) {
+        List<String> roomList = new ArrayList<>();
+        String sql = "SELECT RoomName FROM Rooms WHERE Rooms.UserID = ? ORDER BY RoomName";
     
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username); // Set roomName parameter
+    
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String rooms = rs.getString("RoomName");
+                    String formattedRoom = "[" + rooms + "]" + "\n";
+                    roomList.add(formattedRoom);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to fetch all the rooms.");
+            e.printStackTrace();
+        }
+        return roomList;
+    }
+    
+        
+    public List<String> getChatLog(String roomName) {
+        List<String> chatLogs = new ArrayList<>();
+        String sql = "SELECT MsgUser, Msg, TimeMsg FROM Message WHERE RoomName = ? ORDER BY TimeMsg ASC";
+    
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, roomName); // Set roomName parameter
+    
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String username = rs.getString("MsgUser"); 
+                    String message = rs.getString("Msg");      
+                    Timestamp timestamp = rs.getTimestamp("TimeMsg");
+    
+                    // Format: [timestamp] username: message
+                    String formattedMessage = "[" + timestamp + "] " + username + ": " + message + "\n";
+                    chatLogs.add(formattedMessage);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to fetch chat logs.");
+            e.printStackTrace();
+        }
+    
+        return chatLogs;
+    }
+    
+    public boolean addMsg(String username, String message, Timestamp timeMessage, String RoomName) {
+        String sql = "INSERT INTO Message(MsgUser, Msg, timeMsg, RoomName) VALUES (?, ?, ?, ?)";
+    
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username); 
+            ps.setString(2, message);
+            ps.setTimestamp(3, timeMessage);
+            ps.setString(4, RoomName);
+            int added = ps.executeUpdate();  // Execute the query
+
+            if (added > 0) {
+                System.out.println("Message added successfully");
+                return true;
+            } else {
+                System.out.println("Failed to add message");
+                return false;
+            }    
+        } catch (SQLException e) {
+            System.out.println("Failed to create message, database error");
+            e.printStackTrace();  // Print error details
+            return false;  // Return false if an error occurs
+        }
+    } 
 
     public static String getError(SQLException e){
         String message = e.getMessage();
