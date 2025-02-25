@@ -2,115 +2,98 @@ package com.example;
 import java.util.List;
 
 /**
- * ChatClientController hanterar användarens session efter inloggning.
- * Klassen ansvarar för att hantera chattrumsval, samt initiering av ChatClientModel och ChatClientGUI.
+ * ChatClientController handles the user's session after login.
+ * The class is responsible for handling chatroom selection, 
+ * as well as initializing ChatClientModel and ChatClientGUI.
+ * This class is an observer of ClientNetwork (server communication).
  */
 public class ChatClientController implements Observer {
     
-    private ChatClientModel model; // Referens till användarens data.
-    private ChatClientGUI gui; // Användargränssnitt efter inloggning.
-    private ClientNetwork clientNetwork; // Singleton-instansen av ClientNetwork.
+    private ChatClientModel chatClientModel; // Stores user-related data.
+    private ChatClientGUI chatClientGUI; // User interface after login.
+    private ClientNetwork clientNetwork; // The singleton instance of ClientNetwork.
+    private String username; // TODO: Should maybe be an object...
  
     /**
-     * Konstruktor som tar emot ett validerat användarnamn från LoginController.
-     * Initierar ChatClientModel och ChatClientGUI.
-     * Registrerar ChatClientController som en observer till ClientNetwork.
-     * @param username Användarnamnet för den inloggade användaren.
+     * Constructor that receives a validated username from the LoginController.
+     * Initializes ChatClientModel and ChatClientGUI.
+     * Registers ChatClientController as an observer of ClientNetwork.
+     * @param username The validated username of the logged in user.
      */
     public ChatClientController(String username) {
-        this.clientNetwork = ClientNetwork.getInstance();
-
-        clientNetwork.addObserver(this);
-        model = new ChatClientModel(username);
-        gui = new ChatClientGUI(model);
-
-        clientNetwork.addObserver(this);
-        this.model = new ChatClientModel(username);
-        this.gui = new ChatClientGUI(model);
-
-        System.out.println("ChatClientController skapad för användare: " + username);
+        this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
+        clientNetwork.addObserver(this); // Register this controller as an observer of ClientNetwork.
+        this.username = username;
+        this.chatClientModel = new ChatClientModel(username);
+        this.chatClientGUI = new ChatClientGUI(chatClientModel);
+        System.out.println("ChatClientController skapad för användare: " + username); // Debug.
     }
 
     /**
-     * Hanterar användarens val av chattrum.
-     * Om chattrummet finns i modellens lista över chattrum initieras en ChatRoomController.
-     * @param roomName Namnet på det valda rummet.
+     * Manages the user's choice of chatroom.
+     * If the chatroom is in the model's list of chatrooms, 
+     * a ChatRoomController is initialized.
+     * @param roomName The chatroom name of the selected room.
      */
     public void onRoomSelected(String roomName) {
-        if (model.getChatrooms().contains(roomName)) {
-            ChatroomController chatRoomController = new ChatroomController(roomName);
-            System.out.println("Chattrum valt: " + roomName); 
+        if (chatClientModel.getChatrooms().contains(roomName)) {
+            System.out.println("Joining chatroom: " + roomName); // Debug
+            new ChatroomController(roomName, username); // Initialize ChatroomController
         } else {
-            System.out.println("Fel: Chattrum " + roomName + " existerar inte");
+            System.out.println("Error: Chatroom '" + roomName + "' does not exist."); // Debug
         }
     }
-
+    
     /**
-     * Skapar ett nytt chattrum och lägger till det i modellen och skickar till servern.
-     * @param roomName Namnet på det nya rummet.
+     * Creates a new chatroom and adds it to the model and send it to the server.
+     * @param roomName The chatroom name of the new room.
      */
     public void createRoom(String roomName) {
-        if (!model.getChatrooms().contains(roomName)) { // Kontrollerar om rummet redan existerar i modellen.
-            model.addChatroom(roomName); // Lägger till rummet i modellen.
-            
-            // Om ClientNetwork har en metod för att informera servern, använd den
+        if (!chatClientModel.getChatrooms().contains(roomName)) { 
+            chatClientModel.addChatroom(roomName); // Add the new chatroom locally.
+
+            // Send request to server (assumes clientNetwork.createRoom() exists)...
             if (clientNetwork != null) {
-                System.out.println("Meddelar servern om att skapa rummet: " + roomName);
-                // Här kan vi anropa en faktisk metod i ClientNetwork för att skapa rummet på servern.
-                // clientNetwork.createRoomOnServer(roomName); // Avkommentera när metoden existerar.
+                System.out.println("Notifying server to create room: " + roomName); // Debug
+                clientNetwork.createRoom(roomName); // TODO: Implement this in ClientNetwork.
             }
-
-            System.out.println("Nytt chattrum skapat: " + roomName);
+            System.out.println("New chatroom created: " + roomName); // Debug
         } else {
-            System.out.println("Ett chattrum med namnet \"" + roomName + "\" finns redan.");
+            System.out.println("Chatroom '" + roomName + "' already exists."); // Debug
         }
     }
-
+    
     /**
-     * Startar gränssnittet (GUI) för klienten.
-     */
-    public void startGUI() {
-        if (gui != null) {
-           // gui.show();
-            //gui.setRoomSelectionListener(roomName -> onRoomSelected(roomName));
-            System.out.println("ChatClientGUI startat.");
-        } else {
-            System.out.println("Fel: GUI:t är inte initierat.");
-        }
-    }
-
-    /**
-     * Hanterar notifieringar från observerade objekt (Observable).
-     * @param obj Notifieringen från det observerade objektet.
+     * Handles updates from observed objects (Observable).
+     * @param obj The update notification from the observed object.
      */
     @Override
     public void update(Object obj) {
-        if (obj instanceof List<?>) { // Kontrollerar om objektet är en lista av något slag.
-            List<?> rawList = (List<?>) obj; // Typecastar till en okänd typ av lista.
-        
-            // Checka om alla element är en sträng
-            boolean allStrings = true;
-            for (Object element : rawList) {
-                if (!(element instanceof String)) {
-                    allStrings = false;
-                    break;
-                }
-            } 
+        if (obj instanceof List<?>) { // Check if object is a list.
+            List<?> rawList = (List<?>) obj;
 
+            // Ensure all elements are strings
+            boolean allStrings = rawList.stream().allMatch(e -> e instanceof String);
+            
             if (allStrings) {
-                // "Undertryck" varningar eftersom vi hävdar att listan innehåller strängar
                 @SuppressWarnings("unchecked")
-                List<String> stringList = (List<String>) rawList;
-    
-                // Nu kan vi använda stringList om en List<String>
-                System.out.println("List contains: " + stringList); // Debug
+                List<String> chatrooms = (List<String>) rawList;
+                
+                chatClientModel.setChatrooms(chatrooms); // Update model
+
+                System.out.println("Updated chatrooms: " + chatrooms); // Debug
+
+                // Refresh the GUI once implemented
+                if (chatClientGUI != null) {
+                    // chatClientGUI.refresh(); // Uncomment once implemented
+                }
             } else {
-                System.out.println("The list is not a List<String>"); // Debug
+                System.out.println("Received a list, but not of type List<String>"); // Debug
             }
         } else {
-            System.out.println("Object is not a List at all."); // Debug
+            System.out.println("Received an update that is not a list"); // Debug
         }
-
-        // gui.refresh(); Behöver fixas efter att GUI:t är implementerat
     }
+
+    
 }

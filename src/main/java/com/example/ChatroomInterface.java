@@ -1,7 +1,7 @@
 package com.example;
-import java.util.*;
+import java.util.List;
 
 public interface ChatroomInterface {
-    String getChatLog();
-    List<String> getUsers();
+    ChatHistoryInterface getChatLog();
+    List<User> getUsers();
 }

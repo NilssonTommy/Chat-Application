@@ -1,6 +1,7 @@
 package com.example;
-import java.io.*;   // Imports I/O Streams classes
-import java.net.*;  // Imports the socket class
+import java.io.ObjectInputStream;   // Imports I/O Streams classes
+import java.io.ObjectOutputStream;  // Imports the socket class
+import java.net.Socket;
 
 public final class ClientNetwork {
 
@@ -69,7 +70,7 @@ public final class ClientNetwork {
      * Metod som skickar meddelandet från ChatroomController vidare till servern.
      * @param messageText Meddelandet som användaren skickat.
      */
-    public void sendMessage(String messageText){
+    public void sendMessage(Message msg){
         // Skall implementeras
     }
 
