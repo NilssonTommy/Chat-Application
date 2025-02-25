@@ -1,21 +1,19 @@
 package com.example;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File; // Handling of images.
+import java.io.File;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser; // Handling of Lists.
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter; // Needed to display a file picker when uploading images.
+import javax.imageio.ImageIO; // Handling of images.
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane; // Handling of Lists.
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /* TODO: Change the way which sendImage and sendMessage are travelling. 
-From ChatroomController -> ChatRoomModel -> ClientNetwork
+From ChatroomController -> ChatroomModel -> ClientNetwork
 To ChatroomController -> ClientNetwork
 
 */
-public class ChatroomController implements Observer {
-    private ChatRoomModel chatroomModel; // Handles chat data and communication with ClientNetwork.
+public class ChatroomController{
+    private ChatroomModel chatroomModel; // Handles chat data and communication with ClientNetwork.
     private String roomName; // The name of the chatroom.
     private String username; // The name of the user which sends a message.
     private ChatroomGUI chatroomGUI; // The graphical user interface for the chatroom.
@@ -24,7 +22,7 @@ public class ChatroomController implements Observer {
     
     /**
      * Constructor initializes the chatroom model and GUI using the builder pattern.
-     * Requests initial data from the ChatRoomModel.
+     * Requests initial data from the ChatroomModel.
      * @param roomName The name of the chatroom.
      */
     public ChatroomController(String roomName, String username) {
@@ -32,8 +30,9 @@ public class ChatroomController implements Observer {
 
         this.username = username;
 
-        // Create the ChatRoomModel (which handles ClientNetwork communication)
-        this.chatroomModel = new ChatRoomModel(roomName);
+        // Create the ChatroomModel (which handles ClientNetwork communication)
+        this.chatroomModel = new ChatroomModel(roomName);
+        clientNetwork.getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         // Create a Builder and Director
         ChatroomBuilder builder = new BasicChatroomBuilder();
@@ -51,13 +50,13 @@ public class ChatroomController implements Observer {
 
         this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
 
-        clientNetwork.requestRoomData(roomName);
+        //clientNetwork.requestRoomData(roomName);
 
         chatroomModel.setObservers(chatroomGUI.getChatwindow(), chatroomGUI.getUserwindow());
     }
 
     /**
-     * Sends a text message via ChatRoomModel.
+     * Sends a text message via ChatroomModel.
      */
     private void sendMessage() {
         String messageText = chatroomGUI.getTextfield().getText();
@@ -68,7 +67,7 @@ public class ChatroomController implements Observer {
     }
 
     /**
-     * Opens a file chooser and sends the selected image via ChatRoomModel.
+     * Opens a file chooser and sends the selected image via ChatroomModel.
      */
     private void sendImage() {
         if(fc == null){
@@ -88,15 +87,6 @@ public class ChatroomController implements Observer {
             }
             System.out.println("Image selected: " + selectedFile.getAbsolutePath()); // Debug
         }
-    }
-
-    /**
-     * Handles updates from ChatRoomModel (Observer Pattern).
-     * @param obj The update notification from the observed object.
-     */
-    @Override
-    public void update(Object obj) {
-        System.out.println("Update received: " + obj);
     }
 }
 
