@@ -30,7 +30,7 @@ public class ChatWindowPanel extends JPanel implements Observer{
                     panel = new TextPanel(((TextMessage)m)); 
                     add(panel);
                 } else if (m instanceof ImageMessage){
-                    panel = new ImagePanel(((ImageMessage)m));
+                    panel = new ImagePanel(((ImageMessage)m),getWidth());
                     add(panel);
                 }
                 
@@ -43,7 +43,7 @@ public class ChatWindowPanel extends JPanel implements Observer{
                 panel = new TextPanel(((TextMessage)msg));
                 add(panel);
             } else if (msg instanceof ImageMessage){
-                panel = new ImagePanel(((ImageMessage)msg));
+                panel = new ImagePanel(((ImageMessage)msg), getWidth());
                 add(panel);
             }
             //setPreferredSize(new Dimension(getWidth(), getHeight()+panel.getHeight()));

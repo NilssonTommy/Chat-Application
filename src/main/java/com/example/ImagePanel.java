@@ -9,22 +9,22 @@ public class ImagePanel extends JPanel{
     private int stringheight, imgWidth, imgHeight, width, height;
     private float imgRatio;
     private int verticalSpace = 5;
-    public ImagePanel(ImageMessage msg){
+    public ImagePanel(ImageMessage msg, int parentwidth){
         this.img = msg.getContent();
         imgWidth = img.getWidth(null);
         imgHeight = img.getHeight(null);
         imgRatio = ((float)imgWidth)/((float)imgHeight);
-    }
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        stringheight = (g.getFontMetrics()).getHeight();
-        if(imgWidth >= (getWidth()-60)){
-            width = getWidth()-60;
+        if(imgWidth >= (parentwidth-60)){
+            width = parentwidth-60;
             height = (int)(((float)width)/imgRatio);
         } else {
             width = imgWidth;
             height = imgHeight;
         }
+    }
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        stringheight = (g.getFontMetrics()).getHeight();
         g.setColor(Color.BLACK);
         g.drawString(author + ":", 0, verticalSpace + stringheight);
         setPreferredSize(new Dimension(width + 20,height+40+ (2*verticalSpace)+stringheight+1));
