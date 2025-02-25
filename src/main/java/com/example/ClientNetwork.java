@@ -1,7 +1,6 @@
 package com.example;
-import java.io.ObjectInputStream;   // Imports I/O Streams classes
-import java.io.ObjectOutputStream;  // Imports the socket class
-import java.net.Socket;
+import java.io.*;   // Imports I/O Streams classes
+import java.net.*;  // Imports the socket class
 
 public final class ClientNetwork {
 
@@ -27,7 +26,7 @@ public final class ClientNetwork {
         } catch (Exception e) {System.err.println(e);}
     }
 
-    public void checkUsername(User user) {
+    public void checkUsername(UserInterface user) {
         try {
             oos.writeObject(user);
             oos.flush();
@@ -67,7 +66,7 @@ public final class ClientNetwork {
     }
 
     /**
-     * Metod som skickar meddelandet från ChatroomController vidare till servern.
+     * Metod som skickar meddelande från ChatroomController vidare till servern.
      * @param messageText Meddelandet som användaren skickat.
      */
     public void sendMessage(Message msg){

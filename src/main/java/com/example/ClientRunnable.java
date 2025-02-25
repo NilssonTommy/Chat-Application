@@ -16,7 +16,7 @@ public class ClientRunnable implements Runnable {
         try {
             while (true) {
                 Object obj = ois.readObject();
-                if(obj instanceof User) {
+                if(obj instanceof UserInterface) {
                         oMap.notify("login", obj);
                     }
                 }

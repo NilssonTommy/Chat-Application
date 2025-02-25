@@ -1,6 +1,6 @@
 package com.example;
 
-public interface UserInterface  {
+public interface UserInterface {
 
     public void setUsername(String name);
 
@@ -8,6 +8,10 @@ public interface UserInterface  {
 
     public void setStatus(Boolean status);
 
-    public Boolean getStatus(); 
-    
+    public Boolean getStatus();
+
+    public UserAction getAction();
+
+    public void setAction(UserAction action);
+
 }
