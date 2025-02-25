@@ -10,16 +10,15 @@ public class ChatWindowPanel extends JPanel implements Observer{
     private JPanel invisiblepanel;
     private GridBagConstraints maingbc, invisiblegbc;
     public ChatWindowPanel(){
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        /* setLayout(new GridBagLayout());
+        //setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new GridBagLayout());
         maingbc = new GridBagConstraints();
         invisiblegbc = new GridBagConstraints();
         maingbc.weightx = 1;
         maingbc.anchor = GridBagConstraints.WEST;
         maingbc.gridwidth = GridBagConstraints.REMAINDER;
-        invisiblegbc.weighty = 1; */
-        //invisiblepanel = new JPanel();
-        //add(Box.createVerticalGlue());
+        invisiblegbc.weighty = 1;
+        invisiblepanel = new JPanel();
     }
     public void update(Object obj){
         if (obj instanceof ChatHistoryInterface){
@@ -33,21 +32,20 @@ public class ChatWindowPanel extends JPanel implements Observer{
                     panel = new ImagePanel(((ImageMessage)m),getWidth());
                     add(panel);
                 }
-                
+                add(invisiblepanel, invisiblegbc);
                 revalidate();
             }
         } else if(obj instanceof Message){
             msg = (Message)obj;
-            //remove(invisiblepanel);
+            remove(invisiblepanel);
             if (msg instanceof TextMessage){
                 panel = new TextPanel(((TextMessage)msg));
-                add(panel);
+                add(panel, maingbc);
             } else if (msg instanceof ImageMessage){
                 panel = new ImagePanel(((ImageMessage)msg), getWidth());
-                add(panel);
+                add(panel, maingbc);
             }
-            //setPreferredSize(new Dimension(getWidth(), getHeight()+panel.getHeight()));
-            //add(invisiblepanel, invisiblegbc);
+            add(invisiblepanel, invisiblegbc);
             repaint();
             revalidate();
             
