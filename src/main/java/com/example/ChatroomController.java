@@ -34,7 +34,6 @@ public class ChatroomController implements Observer {
 
         // Create the ChatRoomModel (which handles ClientNetwork communication)
         this.chatroomModel = new ChatRoomModel(roomName);
-        clientNetwork.addSubscriber(chatroomModel); // Register chatroomModel as observer to clientNetwork.
 
         // Create a Builder and Director
         ChatroomBuilder builder = new BasicChatroomBuilder();
@@ -46,19 +45,11 @@ public class ChatroomController implements Observer {
         // Retrieve the finished GUI instance
         this.chatroomGUI = builder.getResult();
 
-        // Add chat window and user window as observers
-        chatroomModel.addSubscriber(chatroomGUI.getChatwindow());
-        chatroomModel.addSubscriber(chatroomGUI.getUserwindow());
-
         // Connect GUI buttons to their respective functions
         chatroomGUI.setSendbuttonListener(e -> sendMessage());
         chatroomGUI.setImagebuttonListener(e -> sendImage());
 
-        // Request chatroom data (messages + user list) from ChatRoomModel
-        chatroomModel.requestRoomData();
-
         this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
-        clientNetwork.addObserver(chatroomModel); // Register this controller as an observer of ClientNetwork.
 
         clientNetwork.requestRoomData(roomName);
 
@@ -71,7 +62,7 @@ public class ChatroomController implements Observer {
     private void sendMessage() {
         String messageText = chatroomGUI.getTextfield().getText();
         if (!messageText.isEmpty()) { // Ensure the message field is not empty
-            clientNetwork.sendMessage(new TextMessage(messageText, username)); // Send message via the model.
+            clientNetwork.sendMessage(new TextMessage(messageText, roomName, username)); // Send message via the model.
             chatroomGUI.getTextfield().setText(""); // Clear the text field after sending.
         }
     }
@@ -91,7 +82,7 @@ public class ChatroomController implements Observer {
             File selectedFile = fc.getSelectedFile(); // Get selected file
             try {
                 BufferedImage img = ImageIO.read(selectedFile);
-                clientNetwork.sendMessage(new ImageMessage(username, img)); // Send the image via the ClientNetwork.
+                clientNetwork.sendMessage(new ImageMessage(username, roomName, img)); // Send the image via the ClientNetwork.
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
             }
