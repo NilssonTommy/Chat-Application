@@ -12,6 +12,7 @@ public class ChatClientController implements Observer {
     private ChatClientModel chatClientModel; // Stores user-related data.
     private ChatClientGUI chatClientGUI; // User interface after login.
     private ClientNetwork clientNetwork; // The singleton instance of ClientNetwork.
+    private String username; // TODO: Should maybe be an object...
  
     /**
      * Constructor that receives a validated username from the LoginController.
@@ -22,6 +23,7 @@ public class ChatClientController implements Observer {
     public ChatClientController(String username) {
         this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
         clientNetwork.addObserver(this); // Register this controller as an observer of ClientNetwork.
+        this.username = username;
         this.chatClientModel = new ChatClientModel(username);
         this.chatClientGUI = new ChatClientGUI(chatClientModel);
         System.out.println("ChatClientController skapad för användare: " + username); // Debug.
@@ -36,7 +38,7 @@ public class ChatClientController implements Observer {
     public void onRoomSelected(String roomName) {
         if (chatClientModel.getChatrooms().contains(roomName)) {
             System.out.println("Joining chatroom: " + roomName); // Debug
-            new ChatroomController(roomName); // Initialize ChatroomController
+            new ChatroomController(roomName, username); // Initialize ChatroomController
         } else {
             System.out.println("Error: Chatroom '" + roomName + "' does not exist."); // Debug
         }
