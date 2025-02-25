@@ -10,7 +10,7 @@ public class ChatroomGUI extends JFrame{
     private JButton sendbutton, imagebutton;
     private JTextField textfield;
     private UserWindowPanel userwindow;
-    private JPanel bottompanel, centerpanel;
+    private JPanel bottompanel;
     private int prevmax_chat, prevmax_user;
     public ChatroomGUI(JScrollPane chatscroll, JScrollPane userscroll, ChatWindowPanel chatwindow, 
             UserWindowPanel userwindow, JButton sendbutton, JButton imagebutton, JTextField textfield){

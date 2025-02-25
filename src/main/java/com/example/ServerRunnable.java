@@ -7,37 +7,31 @@ import java.net.*;
 public class ServerRunnable implements Runnable {
 
     private Socket s;
-    private ClientHandler cH;
 
-    public ServerRunnable(Socket socket, ClientHandler cHandler) {
+    public ServerRunnable(Socket socket) {
         this.s = socket;
-        this.cH = cHandler;
     }
 
     @Override
     public void run() {
+        
+
         try (
             ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream ois = new ObjectInputStream(s.getInputStream())
             ){
-            while(true) {
-                Object receivedObject = ois.readObject();
+                Visitor visitor = new ClientHandler(oos);
+                while(true) {
+                    Object receivedObject = ois.readObject();
 
-                if(receivedObject instanceof User) {
-                    User user = (User)receivedObject;
-                    if(cH.checkUsername(user)){
-                        user.setStatus(true);
-                    }else{
-                        user.setStatus(false);
+                    if(receivedObject instanceof Visitable) {
+                       ( (Visitable) receivedObject).accept(visitor);
                     }
-                    oos.writeObject(user);
-                    oos.flush();
                 }
+            }catch (IOException | ClassNotFoundException e) {
+                System.out.println("Client disconnected");
             }
-        }catch (IOException | ClassNotFoundException e) {
-            System.out.println("Client disconnected");
         }
-    }
     
 
     /*{

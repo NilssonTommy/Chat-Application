@@ -1,27 +1,28 @@
-/* Communication with PortalConnection */
+
 package com.example;
-public class ClientHandler {
+import java.io.*;
+public class ClientHandler implements Visitor{
 
-    private PortalConnection pc;
+    private ObjectOutputStream oos;
+    private LoginHandler loginHandler;
 
-    public ClientHandler(PortalConnection pc) {
-        this.pc = pc;
+    public ClientHandler(ObjectOutputStream oos) {
+        this.oos = oos;
+        this.loginHandler = new LoginHandler();
     }
 
-    /* Verify username */
-    public Boolean checkUsername(User username) {
-        if(pc.login(username.getUsername())) {
-            return true;
+    @Override
+    public void visit(UserRequest user) {
+
+        UserInterface userResponse = loginHandler.checkUsername(user);
+        try{
+        oos.writeObject(userResponse);
+        oos.flush();
+        }catch(IOException e){
+            System.err.println("Couldnt write Object");
         }
-        return false;
     }
 
-    /* Create a new username */
-/*     public Boolean createUser(String name) {
-        if(pc.createUser(name)) {
-            return true;
-        }
-        return false;
-    } */
+  
 
 }

@@ -6,12 +6,13 @@ public class ImageMessage implements Message {
     private String author;
     private Timestamp timestamp;
     private Image img;
+    private String chatroom;
 
-    public ImageMessage(String author ,Image img){
+    public ImageMessage(String author, String chatroom, Image img){
         this.img = img;
         timestamp = new Timestamp(System.currentTimeMillis());
         this.author = author;
-
+        this.chatroom = chatroom;
     }
     public String getAuthor(){
         return author;
@@ -29,5 +30,11 @@ public class ImageMessage implements Message {
     }
     public void setContent(Image img){
         this.img = img;
+    }
+    public String getChatroom(){
+        return chatroom;
+    }
+    public void accept(Visitor visitor){
+        visitor.visit(this);
     }
 }
