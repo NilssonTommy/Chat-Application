@@ -35,7 +35,7 @@ public class testclass{
         //Thread.sleep(200);
         gui.chatwindow.revalidate();*/
         gui.setSendbuttonListener(e -> {
-            TextMessage msg = new TextMessage("John", gui.getTextfield().getText());
+            TextMessage msg = new TextMessage("John","test", gui.getTextfield().getText());
             if (msg.getContent().length() != 0){
                 gui.getChatwindow().update(msg);
                 gui.getUserwindow().update(gui.getTextfield().getText());
@@ -64,11 +64,10 @@ public class testclass{
                         try {
                             img = ImageIO.read(file);
                         } catch (IOException e1) {
-                            // TODO Auto-generated catch block
                             e1.printStackTrace();
                             return;
                         }
-                        gui.getChatwindow().update(new ImageMessage("Bilder", img));
+                        gui.getChatwindow().update(new ImageMessage("Bilder","test", img));
                         SwingUtilities.invokeLater(() ->{
                             gui.getChatwindow().revalidate();
                         });

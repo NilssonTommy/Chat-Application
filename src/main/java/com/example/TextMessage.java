@@ -5,11 +5,13 @@ public class TextMessage implements Message{
     private String author;
     private Timestamp timestamp;
     private String text;
+    private String chatroom;
 
-    public TextMessage(String author ,String text){
+    public TextMessage(String author, String chatroom, String text){
         this.text = text;
         timestamp = new Timestamp(System.currentTimeMillis());
         this.author = author;
+        this.chatroom = chatroom;
     }
     public String getAuthor(){
         return author;
@@ -27,5 +29,11 @@ public class TextMessage implements Message{
     }
     public void setContent(String text){
         this.text = text;
+    }
+    public String getChatroom(){
+        return chatroom;
+    }
+    public void accept(Visitor visitor){
+        visitor.visit(this);
     }
 }
