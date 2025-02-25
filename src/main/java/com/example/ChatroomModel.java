@@ -1,17 +1,17 @@
 package com.example;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
-import javax.swing.plaf.basic.BasicComboBoxUI;
+
+// TODO: Implement Visitable
 
 /**
  * ChatRoomModel manages the data for a specific chatroom.
  * It handles messages, the user list, and communicates with ClientNetwork.
  * Implements Observable to notify ChatRoomController and GUI about updates.
  */
-public class ChatRoomModel implements Observer, ChatroomInterface{
+public class ChatroomModel implements Observer, ChatroomInterface, Serializable, Visitable{
     private String roomName; // Name of the chatroom.
     private ChatHistoryInterface chathistory;
     private List<User> users; // List of users in the chatroom.
@@ -23,21 +23,24 @@ public class ChatRoomModel implements Observer, ChatroomInterface{
      * Constructor initializes the chatroom model.
      * @param roomName The name of the chatroom.
      */
-    public ChatRoomModel(String roomName) {
+    public ChatroomModel(String roomName) {
         this.roomName = roomName;
         this.chathistory = new ChatHistory();
-        this.users = new ArrayList<>();
+        this.users = new LinkedList<>();
         this.clientNetwork = ClientNetwork.getInstance();
 
         this.obschat = new Observable();
         this.obsuser = new Observable();
     }
 
+    /**
+     * 
+     */
     @Override
     public void update(Object obj){
-        if(obj instanceof ChatRoomModel){
-            ChatRoomModel model = (ChatRoomModel)obj;
-            this.chathistory = model.getChatlog();
+        if(obj instanceof ChatroomModel){
+            ChatroomModel model = (ChatroomModel)obj;
+            this.chathistory = model.getChatLog();
             this.users = model.getUsers();
             obschat.notify(chathistory);
             obsuser.notify(users);
@@ -56,12 +59,29 @@ public class ChatRoomModel implements Observer, ChatroomInterface{
         return users;
     }
 
+    /**
+     * Returns the chathistory of the chatroom.
+     */
     public ChatHistoryInterface getChatLog() {
         return chathistory;
     }
 
+    /**
+     * Set observers.
+     * @param chat
+     * @param user
+     */
     public void setObservers(Observer chat, Observer user){
         obschat.addSubscriber(chat);
         obsuser.addSubscriber(user);
     }
+
+    /**
+     * 
+     */
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+    
 }
