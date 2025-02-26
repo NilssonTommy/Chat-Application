@@ -13,7 +13,7 @@ public class ChatHistory implements ChatHistoryInterface {
         return chatlog;
     }
     public void setHistory(List<Message> chatlog){
-        this.chatlog = new ArrayList<Message>(chatlog);
+        this.chatlog = new LinkedList<Message>(chatlog);
     }
     public void addMessage(Message msg){
         chatlog.add(msg);

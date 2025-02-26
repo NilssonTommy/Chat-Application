@@ -24,6 +24,8 @@ public final class ClientNetwork {
             new Thread(cR).start();
 
         } catch (Exception e) {System.err.println(e);}
+
+        System.err.println("startad");
     }
 
     public void checkUsername(UserInterface user) {
@@ -67,10 +69,23 @@ public final class ClientNetwork {
 
     /**
      * Metod som skickar meddelande från ChatroomController vidare till servern.
-     * @param messageText Meddelandet som användaren skickat.
+     * @param msg Meddelandet som användaren skickat.
      */
     public void sendMessage(Message msg){
-        // Skall implementeras
+        try {
+            oos.writeObject(msg);
+            oos.flush();
+        }catch (Exception e) {
+            System.err.println(e);}
+        }
+
+    public void requestRoomData(ChatroomInterface model){
+        try {
+            oos.writeObject(model);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

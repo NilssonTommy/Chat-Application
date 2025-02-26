@@ -27,12 +27,11 @@ public class ChatroomController{
      */
     public ChatroomController(String roomName, String username) {
         this.roomName = roomName;
-
         this.username = username;
 
         // Create the ChatroomModel (which handles ClientNetwork communication)
         this.chatroomModel = new ChatroomModel(roomName);
-        clientNetwork.getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
+        ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         // Create a Builder and Director
         ChatroomBuilder builder = new BasicChatroomBuilder();
@@ -50,7 +49,7 @@ public class ChatroomController{
 
         this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
 
-        //clientNetwork.requestRoomData(roomName);
+        clientNetwork.requestRoomData(chatroomModel);
 
         chatroomModel.setObservers(chatroomGUI.getChatwindow(), chatroomGUI.getUserwindow());
     }
@@ -61,7 +60,7 @@ public class ChatroomController{
     private void sendMessage() {
         String messageText = chatroomGUI.getTextfield().getText();
         if (!messageText.isEmpty()) { // Ensure the message field is not empty
-            clientNetwork.sendMessage(new TextMessage(messageText, roomName, username)); // Send message via the model.
+            clientNetwork.sendMessage(new TextMessage(username, roomName, messageText)); // Send message via the model.
             chatroomGUI.getTextfield().setText(""); // Clear the text field after sending.
         }
     }

@@ -9,17 +9,18 @@ public class ServerRunnable implements Runnable {
     private Socket s;
 
     public ServerRunnable(Socket socket) {
-        this.s = socket;
+        this.s = socket; 
     }
 
     @Override
     public void run() {
         
-
-        try (
+        try(
             ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream ois = new ObjectInputStream(s.getInputStream())
-            ){
+            )
+            {
+                ;
                 Visitor visitor = new ClientHandler(oos);
                 while(true) {
                     Object receivedObject = ois.readObject();

@@ -17,9 +17,14 @@ public class ClientRunnable implements Runnable {
             while (true) {
                 Object obj = ois.readObject();
                 if(obj instanceof UserInterface) {
-                        oMap.notify("login", obj);
-                    }
+                    oMap.notify("login", obj);
+                } else if (obj instanceof Message){
+                    System.out.println(((Message)obj).getChatroom() + ": Meddelande mottaget");
+                    oMap.notify(((Message)obj).getChatroom(), obj);
+                } else if (obj instanceof ChatroomInterface){
+                    oMap.notify(((ChatroomInterface)obj).getRoomName(), obj);
                 }
+            }
         } catch (Exception e) {
             System.out.println("Fel: " + e);
         }
