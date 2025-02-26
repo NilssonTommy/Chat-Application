@@ -14,6 +14,12 @@ public class ImageMessage implements Message {
         this.author = author;
         this.chatroom = chatroom;
     }
+    public ImageMessage(String author, String chatroom, Image img, Timestamp timestamp){
+        this.img = img;
+        this.timestamp = timestamp;
+        this.author = author;
+        this.chatroom = chatroom;
+    }
     public String getAuthor(){
         return author;
     }
