@@ -25,7 +25,7 @@ public class ChatroomModel implements Observer, ChatroomInterface, Serializable,
      */
     public ChatroomModel(String roomName) {
         this.roomName = roomName;
-        this.chathistory = new ChatHistory();
+        this.chathistory = new ChatHistory(roomName);
         this.users = new LinkedList<>();
         this.clientNetwork = ClientNetwork.getInstance();
 
