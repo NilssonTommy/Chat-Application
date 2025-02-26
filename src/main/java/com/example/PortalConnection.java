@@ -169,18 +169,17 @@ public class PortalConnection {
         return chatLogs;
     }
 
-    public List<String> UserList(String roomName) {
-        List<String> userList = new ArrayList<>();
+    public List<UserInterface> UserList(String roomName) {
+        List<UserInterface> userList = new ArrayList<>();
         String sql = "SELECT UserID FROM Rooms WHERE RoomName = ? ORDER BY UserID";
-    
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomName); // Set roomName parameter
-    
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     String user = rs.getString("UserID");
-                    String formattedUser = "[" + user + "]" + "\n";
-                    userList.add(formattedUser);
+                    userList.add(new UserResponse(user, true, null));
                 }
             }
         } catch (SQLException e) {
@@ -189,6 +188,7 @@ public class PortalConnection {
         }
         return userList;
     }
+
 
     public boolean addMsg(String username, String message, Timestamp timeMessage, String RoomName) {
         String sql = "INSERT INTO Message(MsgUser, Msg, timeMsg, RoomName) VALUES (?, ?, ?, ?)";

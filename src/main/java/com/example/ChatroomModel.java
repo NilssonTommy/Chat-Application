@@ -1,6 +1,5 @@
 package com.example;
 
-import java.io.Serializable;
 import java.util.*;
 
 
@@ -11,12 +10,10 @@ import java.util.*;
  * It handles messages, the user list, and communicates with ClientNetwork.
  * Implements Observable to notify ChatRoomController and GUI about updates.
  */
-public class ChatroomModel implements Observer, ChatroomInterface, Serializable, Visitable{
+public class ChatroomModel implements ChatroomInterface{
     private String roomName; // Name of the chatroom.
     private ChatHistoryInterface chathistory;
-    private List<User> users; // List of users in the chatroom.
-    private ClientNetwork clientNetwork; // Handles communication with the server, ClientNetwork is a singelton.
-
+    private List<UserInterface> users; // List of users in the chatroom.
     private Observable obschat, obsuser;
 
     /**
@@ -27,8 +24,6 @@ public class ChatroomModel implements Observer, ChatroomInterface, Serializable,
         this.roomName = roomName;
         this.chathistory = new ChatHistory(roomName);
         this.users = new LinkedList<>();
-        this.clientNetwork = ClientNetwork.getInstance();
-
         this.obschat = new Observable();
         this.obsuser = new Observable();
     }
@@ -41,12 +36,14 @@ public class ChatroomModel implements Observer, ChatroomInterface, Serializable,
         if(obj instanceof ChatroomModel){
             ChatroomModel model = (ChatroomModel)obj;
             this.chathistory = model.getChatLog();
-            this.users = model.getUsers();
+            this.users = new LinkedList<UserInterface>(model.getUsers());
             obschat.notify(chathistory);
             obsuser.notify(users);
         } else if (obj instanceof Message) {
+            chathistory.addMessage((Message)obj);
             obschat.notify((Message)obj);
         } else if (obj instanceof User) {
+            users.add((UserInterface)obj);
             obsuser.notify((User)obj);
         }
     }
@@ -55,7 +52,7 @@ public class ChatroomModel implements Observer, ChatroomInterface, Serializable,
      * Returns the current list of users in the chatroom.
      * @return List of users.
      */
-    public List<User> getUsers() {
+    public List<UserInterface> getUsers() {
         return users;
     }
 
@@ -65,6 +62,22 @@ public class ChatroomModel implements Observer, ChatroomInterface, Serializable,
     public ChatHistoryInterface getChatLog() {
         return chathistory;
     }
+    /**
+     * Returns the name of the chatroom
+     * @return name of the chatroom
+     */
+    public String getRoomName(){
+        return roomName;
+    }
+
+    public void setChatLog(ChatHistoryInterface chathistory){
+        this.chathistory = chathistory;
+    }
+
+    public void setUsers(List<UserInterface> users){
+        this.users = new LinkedList<UserInterface>(users);
+    }
+
 
     /**
      * Set observers.

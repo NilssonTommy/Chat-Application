@@ -18,7 +18,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class testclass{
     static JFileChooser fc;
     public static void main(String[] arg){
-        ChatroomBuilder builder = new BasicChatroomBuilder();
+        new ChatroomController("Test", "Jesper");  
+        /* ChatroomBuilder builder = new BasicChatroomBuilder();
         ChatroomDirector director = new ChatroomDirector();
         director.ConstructChatroomGUI(builder);
         ChatroomGUI gui = builder.getResult();
@@ -33,7 +34,7 @@ public class testclass{
         /*gui.getChatwindow().addImg(ImageIO.read(new File("/Users/jespernyberg/Pictures/icon.png")));
         gui.getChatwindow().addImg(ImageIO.read(new File("/Users/jespernyberg/Pictures/icon.png")));
         //Thread.sleep(200);
-        gui.chatwindow.revalidate();*/
+        gui.chatwindow.revalidate();
         gui.setSendbuttonListener(e -> {
             TextMessage msg = new TextMessage("John","test", gui.getTextfield().getText());
             if (msg.getContent().length() != 0){
@@ -82,7 +83,7 @@ public class testclass{
         });
         SwingUtilities.invokeLater(() ->{
             gui.getChatwindow().revalidate();
-        });
+        }); */
     }
 }
         
