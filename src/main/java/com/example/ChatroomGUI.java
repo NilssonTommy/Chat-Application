@@ -35,8 +35,9 @@ public class ChatroomGUI extends JFrame{
         bottompanel.setLayout(new FlowLayout());
         bottompanel.add(imagebutton);bottompanel.add(textfield);bottompanel.add(sendbutton);
         add(bottompanel, BorderLayout.SOUTH);
+        setLocationRelativeTo(null);
         setTitle("Chatroom");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
         setVisible(true);
     }

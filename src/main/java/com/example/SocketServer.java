@@ -7,9 +7,7 @@ import java.net.*;
 import java.util.*;
 
 public class SocketServer {
-    private Broadcaster broadcaster;
     public SocketServer(){
-        broadcaster = Broadcaster.getInstance();
         try {
             ServerSocket ss = new ServerSocket(6666);
             System.out.println("Waiting for a client connection request...");   

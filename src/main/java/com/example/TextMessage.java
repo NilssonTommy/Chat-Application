@@ -13,6 +13,12 @@ public class TextMessage implements Message{
         this.author = author;
         this.chatroom = chatroom;
     }
+    public TextMessage(String author, String chatroom, String text, Timestamp timestamp){
+        this.text = text;
+        this.timestamp = timestamp;
+        this.author = author;
+        this.chatroom = chatroom;
+    }
     public String getAuthor(){
         return author;
     }
