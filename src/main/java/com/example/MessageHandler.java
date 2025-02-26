@@ -14,11 +14,11 @@ public class MessageHandler {
             ImageMessage image = (ImageMessage)msg;
             //behöver en till metod för att lägga till imagemessages.
         }
-        for(String user: getUsers(msg.getChatroom())){
-            Broadcaster.getInstance().getObservable().notify(user, msg);
+        for(UserInterface user: getUsers(msg.getChatroom())){
+            Broadcaster.getInstance().getObservable().notify(user.getUsername(), msg);
         }
     }
-    private List<String> getUsers(String chatroom){
+    private List<UserInterface> getUsers(String chatroom){
         return pc.UserList(chatroom);
     }
 }
