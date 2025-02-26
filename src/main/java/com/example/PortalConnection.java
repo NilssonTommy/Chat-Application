@@ -166,10 +166,8 @@ public class PortalConnection {
             System.out.println("Failed to fetch chat logs.");
             e.printStackTrace();
         }
-    
         return chatLogs;
     }
-    
 
     public List<UserInterface> UserList(String roomName) {
         List<UserInterface> userList = new ArrayList<>();
