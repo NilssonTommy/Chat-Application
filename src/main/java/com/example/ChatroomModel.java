@@ -42,9 +42,9 @@ public class ChatroomModel implements ChatroomInterface{
         } else if (obj instanceof Message) {
             chathistory.addMessage((Message)obj);
             obschat.notify((Message)obj);
-        } else if (obj instanceof User) {
+        } else if (obj instanceof UserInterface) {
             users.add((UserInterface)obj);
-            obsuser.notify((User)obj);
+            obsuser.notify((UserInterface)obj);
         }
     }
 

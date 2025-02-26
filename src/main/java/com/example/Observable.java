@@ -1,7 +1,8 @@
 package com.example;
+import java.io.Serializable;
 import java.util.*;
 
-public class Observable {
+public class Observable implements Serializable{
     private List<Observer> observers;
     public Observable(){
         observers = new LinkedList<Observer>();
