@@ -1,21 +1,9 @@
 package com.example;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
+
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.List;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 
 
@@ -172,6 +160,5 @@ private void joinRoomListener(){
 
 
 }
-
 
 

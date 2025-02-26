@@ -1,31 +1,36 @@
 package com.example;
 
+import java.util.ArrayList;
+
 public class LoginHandler {
 
     private PortalConnection pc;
 
     public LoginHandler() {
-        this.pc = PortalConnection.getInstance();;
+        this.pc = PortalConnection.getInstance();
     }
 
     /* Verify username */
-    public UserInterface checkUsername(UserInterface user) {
+    public UserInterface checkUsername(UserRequest user) {
+        UserResponse userResponse = new UserResponse(user.getUsername(), false, user.getAction(), new ArrayList<String>());
+
         switch(user.getAction()){
             case LOGIN:
             if(pc.login(user.getUsername())) {
-                user.setStatus(true);
+                userResponse.setStatus(true);
+                userResponse.setRoomList(pc.getChatrooms(user.getUsername()));
             }else{
-                user.setStatus(false);
+                userResponse.setStatus(false);
             }
                 break;
             case REGISTER:
             if(pc.createUser(user.getUsername())) {
-                user.setStatus(true);
+                userResponse.setStatus(true);
             }else{
-                user.setStatus(false);
+                userResponse.setStatus(false);
             }
                 break;
         }
-        return user;
+        return userResponse;
     }
 }

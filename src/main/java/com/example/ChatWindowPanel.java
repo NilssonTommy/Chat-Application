@@ -1,82 +1,56 @@
 package com.example;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.*;
 
 public class ChatWindowPanel extends JPanel implements Observer{
     private ChatHistoryInterface chatlog;
-    private Message msg;
-    private JPanel panel;
-    private JPanel invisiblepanel;
-    private GridBagConstraints maingbc, invisiblegbc;
+    private JTextArea name;
+    private Dimension verticalSpace = new Dimension(0,5);
     public ChatWindowPanel(){
-        //setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        setLayout(new GridBagLayout());
-        maingbc = new GridBagConstraints();
-        invisiblegbc = new GridBagConstraints();
-        maingbc.weightx = 1;
-        maingbc.anchor = GridBagConstraints.WEST;
-        maingbc.gridwidth = GridBagConstraints.REMAINDER;
-        invisiblegbc.weighty = 1;
-        invisiblepanel = new JPanel();
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        add(Box.createVerticalGlue());
+
     }
     public void update(Object obj){
-        if (obj instanceof ChatHistoryInterface){
-            try {
-                //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
-                SwingUtilities.invokeAndWait(()->{
-                    chatlog = (ChatHistoryInterface)obj;
-                    removeAll();
-                    for(Message m: chatlog.getHistory()){
-                        if (m instanceof TextMessage){
-                            panel = new TextPanel(((TextMessage)m)); 
-                            add(panel);
-                        } else if (m instanceof ImageMessage){
-                            panel = new ImagePanel(((ImageMessage)m),getWidth());
-                            add(panel);
-                        }
-                        add(invisiblepanel, invisiblegbc);
-                        SwingUtilities.invokeLater(() -> {
-                            repaint();
-                            revalidate();
-                        });
-                    }
-                });
-            } catch (InvocationTargetException | InterruptedException e) {
-                e.printStackTrace();
+        chatlog = (ChatHistoryInterface)obj;
+        removeAll();
+        for(Message m: chatlog.getHistory()){
+            add(Box.createRigidArea(verticalSpace));
+            name = new JTextArea(m.getAuthor() + ":");
+            name.setBackground(getBackground());
+            name.setEditable(false);
+            if (m instanceof TextMessage){
+                this.add(new TextPanel(((TextMessage)m).getContent()) );
+            } else if (m instanceof ImageMessage){
+                this.add(new ImagePanel(((ImageMessage)m).getContent()));
             }
-            SwingUtilities.invokeLater(() -> {
-                repaint();
-                revalidate();
-            });
-            
-        } else if(obj instanceof Message){
-            try {
-                //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
-                SwingUtilities.invokeAndWait(()->{
-                    msg = (Message)obj;
-                    remove(invisiblepanel);
-                    if (msg instanceof TextMessage){
-                        panel = new TextPanel(((TextMessage)msg));
-                        add(panel, maingbc);
-                    } else if (msg instanceof ImageMessage){
-                        panel = new ImagePanel(((ImageMessage)msg), getWidth());
-                        add(panel, maingbc);
-                    }
-                    add(invisiblepanel, invisiblegbc);
-                    SwingUtilities.invokeLater(()-> {
-                        repaint();
-                        revalidate();
-                    });
-                });
-            } catch (InvocationTargetException | InterruptedException e) {
-                e.printStackTrace();
-            }
-            SwingUtilities.invokeLater(()-> {
-                repaint();
-                revalidate();
-            });
+            add(Box.createRigidArea(verticalSpace));
+            repaint();
+            revalidate();
         }
     }
+    /* 
+    public void addText(String text){
+        add(Box.createRigidArea(verticalSpace));
+        name = new JTextArea("Test:");
+        name.setBackground(getBackground());
+        name.setEditable(false);
+        add(name);
+        add(new TextPanel(text));
+        add(Box.createRigidArea(verticalSpace));
+        repaint();
+        revalidate();
+    }
+    public void addImg(Image img){
+        add(Box.createRigidArea(verticalSpace));
+        name = new JTextArea("Test:");
+        name.setBackground(getBackground());
+        name.setEditable(false);
+        add(name);
+        add(new ImagePanel(img));
+        add(Box.createRigidArea(verticalSpace));
+        add(Box.createVerticalBox());
+        repaint();
+        revalidate();
+    }*/
 }

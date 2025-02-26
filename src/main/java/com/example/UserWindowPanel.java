@@ -1,41 +1,32 @@
 package com.example;
-import java.awt.*;
-import java.util.List;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
 
 import javax.swing.*;
 
 public class UserWindowPanel extends JPanel implements Observer{
-    private List<String> users;
-    private JLabel invisisblelabel;
-    private GridBagConstraints maingbc, invisiblegbc;
+    ChatroomInterface chatroom;
+    JTextArea name;
     public UserWindowPanel(){
-        setLayout(new GridBagLayout());
-        maingbc = new GridBagConstraints();
-        invisiblegbc = new GridBagConstraints();
-        maingbc.weightx = 1;
-        maingbc.anchor = GridBagConstraints.WEST;
-        maingbc.gridwidth = GridBagConstraints.REMAINDER;
-        invisiblegbc.weighty = 1;
-        invisisblelabel = new JLabel();
-        invisisblelabel.setPreferredSize(new Dimension(50,10));
-        add(invisisblelabel);
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setPreferredSize(new Dimension(50,300));
+        add(Box.createVerticalGlue());
     }
     public void update(Object obj){
-        if(obj instanceof List){
-            @SuppressWarnings("unchecked")
-            List<String> users = (List<String>)obj;
-            removeAll();
-            for(String u : users){
-                add(new JLabel(u), maingbc);
-            }
-            add(invisisblelabel, invisiblegbc);
-            revalidate();
-        } else if (obj instanceof String){
-            String name = (String)obj;
-            remove(invisisblelabel);
-            add(new JLabel(name), maingbc);
-            add(invisisblelabel, invisiblegbc);
+        chatroom = (ChatroomInterface)obj;
+        removeAll();
+        for(String u : chatroom.getUsers()){
+            name = new JTextArea(u);
+            name.setEditable(false);
+            add(name);
+            repaint();
             revalidate();
         }
     }
+    /* 
+    public void addText(String text){
+        add(new JTextArea(text));
+        repaint();
+        revalidate();
+    } */
 }

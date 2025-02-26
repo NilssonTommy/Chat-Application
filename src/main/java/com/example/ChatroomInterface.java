@@ -1,11 +1,7 @@
 package com.example;
-import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
-public interface ChatroomInterface extends Serializable, Visitable, Observer {
-    ChatHistoryInterface getChatLog();
-    List<UserInterface> getUsers();
-    String getRoomName();
-    void setChatLog(ChatHistoryInterface chathistory);
-    void setUsers(List<UserInterface> users);
+public interface ChatroomInterface {
+    List<String> getChatLog();
+    List<String> getUsers();
 }

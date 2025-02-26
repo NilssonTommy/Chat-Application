@@ -1,6 +1,7 @@
 package com.example;
-import java.io.*;   // Imports I/O Streams classes
-import java.net.*;  // Imports the socket class
+import java.io.ObjectInputStream;   // Imports I/O Streams classes
+import java.io.ObjectOutputStream;  // Imports the socket class
+import java.net.Socket;
 
 public final class ClientNetwork {
 
@@ -24,8 +25,6 @@ public final class ClientNetwork {
             new Thread(cR).start();
 
         } catch (Exception e) {System.err.println(e);}
-
-        System.err.println("startad");
     }
 
     public void checkUsername(UserInterface user) {
@@ -35,25 +34,29 @@ public final class ClientNetwork {
         }catch (Exception e) {System.err.println(e);}
     }
 
-    /* Create user logik */
-    //      Uppdatera databas med en ny user
+    /* Metod för att välja rum. Vi skriver och flushar */
+    public void checkRoom(ChatroomModel chatroomModel) {
 
-    /* Create room logik */
-    //      Uppdatera databas när ett rum skapas
-    //      Kommunicera med databasen när vi skapar ett nytt rum
+        System.out.println("Vi e inne i checkroom ClientNetwork: " + chatroomModel.getRoomName());
 
-    /* Join room logik */
-    //      Retunera historik
-    //      Retunera vilka användare som tillhör ett rum
-    //      Uppdatera listan i databasen när någon ansluter sig til rummet för första gången
+        try{
+            oos.writeObject(chatroomModel);
+            oos.flush();
+        }catch (Exception e) {System.err.println(e);}
+    }
 
-    /* Ska man kunna exa ett rum? */
-    //      Logik för det
+    
 
-    /* Uppdateringar i realtd */
-    //      Uppdatera databasen när vi skriver något.
-    //      Läsa av databas historik i realtid.
-    //      Läsa användarlistan kontinuerligt i realtid (när någon joinar).
+
+
+
+    /* public void joinRoom(String username, String room, historik, userList) {} */
+
+    /* public void deleteRoom(String username, String room) {} */
+
+    /* public void leaveRoom(String username, String room) {} */
+
+
 
 
     public static ClientNetwork getInstance() {
@@ -69,23 +72,10 @@ public final class ClientNetwork {
 
     /**
      * Metod som skickar meddelande från ChatroomController vidare till servern.
-     * @param msg Meddelandet som användaren skickat.
+     * @param messageText Meddelandet som användaren skickat.
      */
     public void sendMessage(Message msg){
-        try {
-            oos.writeObject(msg);
-            oos.flush();
-        }catch (Exception e) {
-            System.err.println(e);}
-        }
-
-    public void requestRoomData(ChatroomInterface model){
-        try {
-            oos.writeObject(model);
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Skall implementeras
     }
 
 }

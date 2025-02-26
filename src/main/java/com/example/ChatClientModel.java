@@ -2,16 +2,16 @@ package com.example;
 import java.util.*;
 
 public class ChatClientModel implements ChatClientInterface {
-    private String username;
+    private UserInterface user;
     private List<String> chatrooms;
 
-    public ChatClientModel(String username){
-        this.username = username;
-        chatrooms = new LinkedList<String>();
+    public ChatClientModel(UserResponse user){
+        this.user = user;
+        chatrooms = user.getRoomList();
     }
 
     public String getUsername(){
-        return username;
+        return user.getUsername();
     }
 
     public List<String> getChatrooms(){

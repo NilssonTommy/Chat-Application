@@ -1,92 +1,80 @@
 package com.example;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO; // Handling of images.
+import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane; // Handling of Lists.
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/* TODO: Change the way which sendImage and sendMessage are travelling. 
-From ChatroomController -> ChatroomModel -> ClientNetwork
-To ChatroomController -> ClientNetwork
-
-*/
+/**
+ * ChatRoomController hanterar logiken för det valda chattrummet.
+ * Den initierar och hanterar ChatRoomModel samt kopplar den 
+ * till ChatroomGUI som skapas via Builder Pattern.
+ */
 public class ChatroomController{
-    private ChatroomModel chatroomModel; // Handles chat data and communication with ClientNetwork.
-    private String roomName; // The name of the chatroom.
-    private String username; // The name of the user which sends a message.
-    private ChatroomGUI chatroomGUI; // The graphical user interface for the chatroom.
-    private ClientNetwork clientNetwork; // Singelton-instance.
-    private JFileChooser fc; 
-    
+    private ChatroomModel chatroomModel; // Hanterar datan och kommunikation med servern (via ClientNetwork) för det chattrummet.
+    private String roomName; // Chattrummets namn.
+    private ChatroomGUI chatroomGUI; // Användarens gränssnitt för chattrummet.
+    private ClientNetwork clientNetwork; // Singelton-instans.
+    private String username;
+
     /**
-     * Constructor initializes the chatroom model and GUI using the builder pattern.
-     * Requests initial data from the ChatroomModel.
-     * @param roomName The name of the chatroom.
+     * Konstruktor som initierar chattrummets model med chattrummets namn.
+     * Skapar chattrummets GUI genom builder design pattern.
+     * @param roomName Namnet på ett specifitk chattrum.
      */
-    public ChatroomController(String roomName, String username) {
-        this.roomName = roomName;
+    public ChatroomController(String roomName, String username){
         this.username = username;
+        this.roomName = roomName;
+//        this.chatroomModel = new ChatRoomModel(roomName);
+        this.clientNetwork = ClientNetwork.getInstance();
 
-        // Create the ChatroomModel (which handles ClientNetwork communication)
-        this.chatroomModel = new ChatroomModel(roomName);
-        ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
+        // Skapa en Builder och Director
+//        ChatroomBuilder builder = new BasicChatroomBuilder();
+        //ChatroomDirector director = new ChatroomDirector();
 
-        // Create a Builder and Director
-        ChatroomBuilder builder = new BasicChatroomBuilder();
-        ChatroomDirector director = new ChatroomDirector();
 
-        // Director constructs the GUI using the Builder
-        director.ConstructChatroomGUI(builder);
+        // Directorn konstruerar GUI:t med Buildern
+//        director.ConstructChatroomGUI(builder);
 
-        // Retrieve the finished GUI instance
-        this.chatroomGUI = builder.getResult();
+        // Hämta den färdiga GUI-instansen
+//        this.chatroomGUI = builder.getResult();
 
-        // Connect GUI buttons to their respective functions
+        // Koppla GUI: chatWindow och userWindow som observers till modellen
+//        chatroomModel.addSubscriber(chatroomGUI.getChatwindow());
+//        chatroomModel.addSubscriber(chatroomGUI.getUserwindow());
+
+        // Koppla GUI:s knappar för att skicka text och bild till deras funktioner
         chatroomGUI.setSendbuttonListener(e -> sendMessage());
-        chatroomGUI.setImagebuttonListener(e -> sendImage());
-
-        this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
-
-        clientNetwork.requestRoomData(chatroomModel);
-
-        chatroomModel.setObservers(chatroomGUI.getChatwindow(), chatroomGUI.getUserwindow());
+        chatroomGUI.setImagebuttonListener(e -> sendImage()); 
     }
 
-    /**
-     * Sends a text message via ChatroomModel.
+    /*
+     * Skickar ett meddelande genom att be ChatRoomModel att hantera det.
      */
-    private void sendMessage() {
-        String messageText = chatroomGUI.getTextfield().getText();
-        if (!messageText.isEmpty()) { // Ensure the message field is not empty
-            clientNetwork.sendMessage(new TextMessage(username, roomName, messageText)); // Send message via the model.
-            chatroomGUI.getTextfield().setText(""); // Clear the text field after sending.
+    private void sendMessage(){
+        String messageText = chatroomGUI.getTextfield().getText().trim();
+        if(!messageText.isEmpty()){ // Om det finns text i meddelandefältet.
+//            clientNetwork.sendMessage(messageText); // Skickar meddelandet till modellen som hanterar server-kommunikation.
+            chatroomGUI.getTextfield().setText(""); // Rensar textfältet efter att meddelandet skickas.
         }
     }
 
-    /**
-     * Opens a file chooser and sends the selected image via ChatroomModel.
+    /*
+     * Skickar en bild genom att öppna en filväljare och skicka den valda filen (bilden) genom att be ChatRoomModel att hantera det.
      */
-    private void sendImage() {
-        if(fc == null){
-            fc = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", ImageIO.getReaderFileSuffixes()); // Restrict file types
-            fc.setFileFilter(filter);
-        }
-        int returnValue = fc.showOpenDialog(null); // Wait for user to select a file
+    private void sendImage(){
+        JFileChooser fileChooser = new JFileChooser(); // Låter användaren välja en fil.
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "jpeg", "gif"); // Filtrerar bort ogiltiga filformat.
+        fileChooser.setFileFilter(filter); // Filformatfiltret tillämpas på fileChooser.
+
+        int returnValue = fileChooser.showOpenDialog(null); // Öppnar filväljaren så att användaren kan välja en fil.
         
-        if (returnValue == JFileChooser.APPROVE_OPTION) { // If a file is chosen
-            File selectedFile = fc.getSelectedFile(); // Get selected file
-            try {
-                BufferedImage img = ImageIO.read(selectedFile);
-                clientNetwork.sendMessage(new ImageMessage(username, roomName, img)); // Send the image via the ClientNetwork.
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
-            }
-            System.out.println("Image selected: " + selectedFile.getAbsolutePath()); // Debug
+        if(returnValue == JFileChooser.APPROVE_OPTION){ // Om användaren valde en fil.
+            File selectedFile = fileChooser.getSelectedFile(); // Lagrar vald fil i selectedFile.
+            System.out.println("Bild vald: " + selectedFile.getAbsolutePath()); // Debug
+//            chatroomModel.sendImage(selectedFile); // Skickar bilden till modellen som hanterar server-kommunikation.
+        } else{
+            System.out.println("Bildval avbröts."); // Debug
         }
     }
+
 }
-
-

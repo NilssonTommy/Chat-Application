@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.List;
+
 public interface UserInterface {
 
     public void setUsername(String name);

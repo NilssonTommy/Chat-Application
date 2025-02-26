@@ -1,23 +1,31 @@
 package com.example;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class UserResponse implements UserInterface, Serializable {
 
     private String username;
     private Boolean status;
     private UserAction action;
+    private List<String> roomList;
     
 
-    public UserResponse(String name, Boolean status, UserAction action) {
+    public UserResponse(String name, Boolean status, UserAction action, List<String> roomList) {
         this.username = name;
         this.status = status;
         this.action = action;
+        this.roomList = new ArrayList<String> (roomList);
         // private String firstName;
         // private String lastName;
         // private String birthDay;
         // private String city;
         // private String eMail;
+    }
+
+    public UserResponse(String name, Boolean status, UserAction action) {
+        this.username = name;
+        this.status = status;
     }
 
     public void setUsername(String name) {
@@ -42,6 +50,14 @@ public class UserResponse implements UserInterface, Serializable {
 
     public UserAction getAction(){
         return action;
+    }
+
+    public List<String> getRoomList(){
+        return roomList;
+    }
+
+    public void setRoomList(List<String> roomList){
+        this.roomList = new ArrayList<String> (roomList);
     }
 
 }
