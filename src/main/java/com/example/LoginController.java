@@ -1,11 +1,15 @@
 package com.example;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginController implements Observer {
 
     private LoginWindow loginWindow;
     private RegisterWindow registerWindow;
     private UserInterface user;
+    private UserResponse userResponse;
     private ClientNetwork clientNetwork;
     
     public LoginController() {
@@ -17,18 +21,18 @@ public class LoginController implements Observer {
     }
 
     public void update(Object object) {
-        user = (UserInterface)object;
-        switch(user.getAction()) {
+        userResponse = (UserResponse)object;
+        switch(userResponse.getAction()) {
             
             case LOGIN:
-                if (user.getStatus()) {
-                    new ChatClientController(user);
+                if (userResponse.getStatus()) {
+                    new ChatClientController(userResponse);
                 } else {
                     loginWindow.invalidUsername();
                 }break;
 
             case REGISTER:
-                if (user.getStatus()) {
+                if (userResponse.getStatus()) {
                     registerWindow.registrationComplete();
                 } else {
                     registerWindow.registrationFailed();

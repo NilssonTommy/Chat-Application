@@ -1,6 +1,8 @@
 package com.example;
-import java.io.*;   // Imports I/O Streams classes
-import java.net.*;  // Imports the socket class
+import java.io.IOException;   // Imports I/O Streams classes
+import java.io.ObjectInputStream;  // Imports the socket class
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public final class ClientNetwork {
 
@@ -35,26 +37,17 @@ public final class ClientNetwork {
         }catch (Exception e) {System.err.println(e);}
     }
 
-    /* Create user logik */
-    //      Uppdatera databas med en ny user
+     /* Metod för att välja rum. Vi skriver och flushar */
+     public void checkRoom(ChatroomInterface chatroomModel) {
 
-    /* Create room logik */
-    //      Uppdatera databas när ett rum skapas
-    //      Kommunicera med databasen när vi skapar ett nytt rum
+        System.out.println("Vi e inne i checkroom ClientNetwork: " + chatroomModel.getRoomName());
 
-    /* Join room logik */
-    //      Retunera historik
-    //      Retunera vilka användare som tillhör ett rum
-    //      Uppdatera listan i databasen när någon ansluter sig til rummet för första gången
-
-    /* Ska man kunna exa ett rum? */
-    //      Logik för det
-
-    /* Uppdateringar i realtd */
-    //      Uppdatera databasen när vi skriver något.
-    //      Läsa av databas historik i realtid.
-    //      Läsa användarlistan kontinuerligt i realtid (när någon joinar).
-
+        try{
+            oos.writeObject(chatroomModel);
+            oos.flush();
+        }catch (Exception e) {System.err.println(e);}
+    }
+     
 
     public static ClientNetwork getInstance() {
         if (instance == null){
