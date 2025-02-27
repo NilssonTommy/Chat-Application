@@ -31,7 +31,7 @@ public class ChatroomController{
         this.username = username;
 
         // Create the ChatroomModel (which handles ClientNetwork communication)
-        this.chatroomModel = new ChatroomModel(roomName);
+        this.chatroomModel = new ChatroomModel(username, roomName, UserAction.SELECT);
         ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         // Create a Builder and Director

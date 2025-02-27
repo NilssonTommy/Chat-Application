@@ -1,4 +1,5 @@
 package com.example;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -124,54 +125,6 @@ public class ChatClientGUI extends JFrame {
     }
     
 
-    /* 
-
-  
-    private void createRoomListener(){
-            gui.addCreateRoomListener(listener -> {
-            String roomName = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Creating room: " + roomName);
-            model.addChatroom(roomName);   
-            gui.updateRoomList();
-            });
 }
-
- private void selectRoomListener(){
-    gui.addRoomSelectionListener(e -> {
-        String selected = gui.getSelectedRoom(); // ✅ Få det valda rummet
-        if (selected != null) {
-            roomName = selected; // ✅ Uppdatera `roomName`
-            System.out.println("Selected room: " + roomName);
-        } else {
-            System.out.println("Inget rum valt.");
-        }
-    });
-}
-
-private void joinRoomListener(){
-    gui.addJoinRoomListener(listener -> {
-        if (roomName != null) {
-            System.out.println("Joining room: " + roomName);
-        } else {
-            System.out.println("Välj ett rum innan du går med!");
-        }
-    });
-}
-
-
-    private void addRoomListener(){
-        gui.addAddRoomListener(listener -> {
-            roomName = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Adding room: " + roomName);
-            model.addChatroom(roomName);   
-            gui.updateRoomList();
-        });
-    }
-    /**
-    */
-
-
-}
-
 
 

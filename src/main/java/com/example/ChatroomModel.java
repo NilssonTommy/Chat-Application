@@ -15,6 +15,12 @@ public class ChatroomModel implements ChatroomInterface{
     private ChatHistoryInterface chathistory;
     private List<UserInterface> users; // List of users in the chatroom.
     private Observable obschat, obsuser;
+    private UserAction action;
+    private Boolean status;
+    private String username;
+
+
+
 
     /**
      * Constructor initializes the chatroom model.
@@ -26,6 +32,17 @@ public class ChatroomModel implements ChatroomInterface{
         this.users = new LinkedList<>();
         this.obschat = new Observable();
         this.obsuser = new Observable();
+    }
+
+    public ChatroomModel(String username, String roomName, UserAction action){
+        this.username = username;
+        this.roomName = roomName;
+        this.status = false;
+        this.action = action;
+        this.chathistory = new ChatHistory(roomName);
+        this.obschat = new Observable();
+        this.obsuser = new Observable();
+        this.users = new LinkedList<>();
     }
 
     /**
@@ -77,6 +94,29 @@ public class ChatroomModel implements ChatroomInterface{
     public void setUsers(List<UserInterface> users){
         this.users = new LinkedList<UserInterface>(users);
     }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+    public Boolean getStatus(){
+        return status;
+    }
+
+    public void setAction(UserAction action) {
+        this.action = action;
+    }
+
+    public UserAction getAction() {
+        return action;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+
+
+
 
 
     /**

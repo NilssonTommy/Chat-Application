@@ -1,9 +1,13 @@
 package com.example;
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.event.*;
-import javax.swing.*;
-import java.awt.Cursor;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 //Kommer att fixa design på layout nu så det ser snyggare ut
 
@@ -32,8 +36,8 @@ public class RegisterWindow extends JFrame {
         setVisible(true);
     }
 
-    public void addRegisterListener(MouseListener listener) {
-        RegisterButton.addMouseListener(listener);
+    public void addRegistrationListener(ActionListener listener) {
+        RegisterButton.addActionListener(listener);
     }
     
     public void registrationComplete(){

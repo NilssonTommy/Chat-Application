@@ -11,7 +11,6 @@ public class ChatWindowPanel extends JPanel implements Observer{
     private JPanel invisiblepanel;
     private GridBagConstraints maingbc, invisiblegbc;
     public ChatWindowPanel(){
-        //setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setLayout(new GridBagLayout());
         maingbc = new GridBagConstraints();
         invisiblegbc = new GridBagConstraints();
@@ -23,12 +22,12 @@ public class ChatWindowPanel extends JPanel implements Observer{
     }
     public void update(Object obj){
         if (obj instanceof ChatHistoryInterface){
-            try {
-                //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
-                SwingUtilities.invokeAndWait(()->{
-                    chatlog = (ChatHistoryInterface)obj;
-                    removeAll();
-                    for(Message m: chatlog.getHistory()){
+            chatlog = (ChatHistoryInterface)obj;
+            removeAll();
+            for(Message m: chatlog.getHistory()){
+                try {
+                    //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
+                    SwingUtilities.invokeAndWait(()->{
                         if (m instanceof TextMessage){
                             panel = new TextPanel(((TextMessage)m)); 
                             add(panel, maingbc);
@@ -37,20 +36,19 @@ public class ChatWindowPanel extends JPanel implements Observer{
                             add(panel, maingbc);
                         }
                         add(invisiblepanel, invisiblegbc);
-                        SwingUtilities.invokeLater(() -> {
-                            repaint();
-                            revalidate();
-                        });
-                    }
+                    });
+                } catch (InvocationTargetException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                SwingUtilities.invokeLater(() -> {
+                    repaint();
+                    revalidate();
                 });
-            } catch (InvocationTargetException | InterruptedException e) {
-                e.printStackTrace();
             }
             SwingUtilities.invokeLater(() -> {
                 repaint();
                 revalidate();
             });
-            
         } else if(obj instanceof Message){
             try {
                 //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated

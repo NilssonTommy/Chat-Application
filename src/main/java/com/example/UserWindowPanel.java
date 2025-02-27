@@ -32,6 +32,8 @@ public class UserWindowPanel extends JPanel implements Observer{
                     }
                     add(invisisblelabel, invisiblegbc);
                     revalidate();
+                } else {
+                    System.out.println("List submitted to UserWindowPanel does not consist of UserInterface");
                 }
             }
             

@@ -1,28 +1,25 @@
 
 package com.example;
-import java.io.*;
-import java.net.Socket;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 public class ClientHandler implements Visitor, Observer{
 
     private ObjectOutputStream oos;
     private LoginHandler loginHandler;
     private MessageHandler messageHandler;
-    private ChatroomHandler chatroomHandler;
+    private RoomHandler roomHandler;
 
     public ClientHandler(ObjectOutputStream oos) {
         this.oos = oos;
         this.loginHandler = new LoginHandler();
         this.messageHandler = new MessageHandler();
-        this.chatroomHandler = new ChatroomHandler();
+        this.roomHandler = new RoomHandler();
     }
 
     @Override
     public void visit(UserRequest user) {
 
         UserInterface userResponse = loginHandler.checkUsername(user);
-        if(userResponse.getStatus()){
-            Broadcaster.getInstance().getObservable().addSubscriber(userResponse.getUsername(), this);
-        }
         try{
         oos.writeObject(userResponse);
         oos.flush();
@@ -35,17 +32,23 @@ public class ClientHandler implements Visitor, Observer{
         messageHandler.addMessage(msg);
     }
 
-    public void visit(ChatroomInterface model){
-        model = chatroomHandler.getChatroomModel(model);
-        try {
-            oos.writeObject(model);
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public void visit(ChatroomInterface chatroomModel) {
+        ChatroomInterface returnModel = roomHandler.clientRequest(chatroomModel);
+        if(chatroomModel.getAction() == UserAction.SELECT){
+            Broadcaster.getInstance().getObservable().addSubscriber(chatroomModel.getRoomName(), this);
+        }
+        try{
+        oos.writeObject(returnModel);
+        oos.flush();
+        }catch(IOException e){
+            System.err.println("Couldnt write Object");
         }
     }
+
     public void update(Object obj){
         try {
+            System.out.println("Broadcasting for chatroom");
             oos.writeObject(obj);
             oos.flush();
         } catch (IOException e) {

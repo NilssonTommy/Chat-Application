@@ -1,5 +1,5 @@
 package com.example;
-import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  * ChatClientController handles the user's session after login.
@@ -12,7 +12,8 @@ public class ChatClientController implements Observer {
     private ChatClientModel chatClientModel; // Stores user-related data.
     private ChatClientGUI chatClientGUI; // User interface after login.
     private ClientNetwork clientNetwork; // The singleton instance of ClientNetwork.
-    private String username; // TODO: Should maybe be an object...
+    private UserResponse user;
+    private String roomName;
  
     /**
      * Constructor that receives a validated username from the LoginController.
@@ -20,13 +21,63 @@ public class ChatClientController implements Observer {
      * Registers ChatClientController as an observer of ClientNetwork.
      * @param username The validated username of the logged in user.
      */
-    public ChatClientController(String username) {
+    public ChatClientController(UserResponse user) {
+        this.user = user;
         this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
-        clientNetwork.addObserver(this); // Register this controller as an observer of ClientNetwork.
-        this.username = username;
-        this.chatClientModel = new ChatClientModel(username);
+        initObservable();
+        this.chatClientModel = new ChatClientModel(user);
         this.chatClientGUI = new ChatClientGUI(chatClientModel);
-        System.out.println("ChatClientController skapad för användare: " + username); // Debug.
+        selectRoomListener();
+        joinRoomListener();
+        createRoomListener();
+        addRoomListener();
+    }   
+
+
+    private void createRoomListener(){
+        chatClientGUI.addCreateRoomListener(listener -> {
+            String roomName = JOptionPane.showInputDialog("Enter room name");
+            System.out.println("Creating room: " + roomName);
+           // chatClientModel.addChatroom(roomName);   
+            //chatClientGUI.updateRoomList();
+            System.out.println(roomName);
+            createRoom(roomName);
+
+            });
+}
+
+ private void selectRoomListener(){
+    chatClientGUI.addRoomSelectionListener(e -> {
+        String selected = chatClientGUI.getSelectedRoom(); 
+        if (selected != null) {
+            roomName = selected; 
+            System.out.println("Selected room: " + roomName);
+        } else {
+            System.out.println("Inget rum valt.");
+        }
+    });
+}
+
+private void joinRoomListener(){
+    chatClientGUI.addJoinRoomListener(listener -> {
+        if (roomName != null) {
+            System.out.println("Joining room: " + roomName);
+            new ChatroomController(roomName, user.getUsername());
+        } else {
+            System.out.println("Välj ett rum innan du går med!");
+        }
+    });
+}
+
+
+    private void addRoomListener(){
+        chatClientGUI.addAddRoomListener(listener -> {
+            roomName = JOptionPane.showInputDialog("Enter room name");
+            System.out.println("Adding room: " + roomName);
+            joinRoom(roomName);
+           // chatClientModel.addChatroom(roomName);   
+            //chatClientGUI.updateRoomList();
+        });
     }
 
     /**
@@ -35,10 +86,10 @@ public class ChatClientController implements Observer {
      * a ChatRoomController is initialized.
      * @param roomName The chatroom name of the selected room.
      */
-    public void onRoomSelected(String roomName) {
+    private void onRoomSelected(String roomName) {
         if (chatClientModel.getChatrooms().contains(roomName)) {
             System.out.println("Joining chatroom: " + roomName); // Debug
-            new ChatroomController(roomName, username); // Initialize ChatroomController
+            new ChatroomController(roomName, user.getUsername()); // Initialize ChatroomController
         } else {
             System.out.println("Error: Chatroom '" + roomName + "' does not exist."); // Debug
         }
@@ -50,16 +101,23 @@ public class ChatClientController implements Observer {
      */
     public void createRoom(String roomName) {
         if (!chatClientModel.getChatrooms().contains(roomName)) { 
-            chatClientModel.addChatroom(roomName); // Add the new chatroom locally.
-
-            // Send request to server (assumes clientNetwork.createRoom() exists)...
             if (clientNetwork != null) {
-                System.out.println("Notifying server to create room: " + roomName); // Debug
-                clientNetwork.createRoom(roomName); // TODO: Implement this in ClientNetwork.
+                clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.CREATE));
             }
-            System.out.println("New chatroom created: " + roomName); // Debug
         } else {
             System.out.println("Chatroom '" + roomName + "' already exists."); // Debug
+            createFailed();
+        }
+    }
+
+    public void joinRoom(String roomName) {
+        if (!chatClientModel.getChatrooms().contains(roomName)) { 
+            if (clientNetwork != null) {
+                clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.JOIN));
+            }
+        } else {
+            System.out.println("Chatroom '" + roomName + "' already exists in your list."); // Debug
+            roomOnList();
         }
     }
     
@@ -69,6 +127,31 @@ public class ChatClientController implements Observer {
      */
     @Override
     public void update(Object obj) {
+        if(obj instanceof ChatroomModel){
+        ChatroomModel chatroom = (ChatroomModel) obj;
+        System.out.println("Chatroom: " + chatroom.getRoomName() + " Status: " + chatroom.getStatus());
+
+       switch(chatroom.getAction()){
+        
+            case JOIN:
+                if(chatroom.getStatus()){
+                    chatClientModel.addChatroom(chatroom.getRoomName());
+                    chatClientGUI.updateRoomList();
+                }else  {
+                    joinFailed();
+                }
+                break;
+            case CREATE:
+                if(chatroom.getStatus()){
+                    chatClientModel.addChatroom(chatroom.getRoomName());
+                    chatClientGUI.updateRoomList();
+                }else {
+                    createFailed();
+               }
+                break;
+       }
+    }
+        /* 
         if (obj instanceof List<?>) { // Check if object is a list.
             List<?> rawList = (List<?>) obj;
 
@@ -92,8 +175,22 @@ public class ChatClientController implements Observer {
             }
         } else {
             System.out.println("Received an update that is not a list"); // Debug
-        }
+        }*/
+ }
+
+    private void initObservable(){
+        clientNetwork.getClientRunnable().getObservableMap().addSubscriber("chatClientController", this);
     }
 
-    
+    public void createFailed(){
+        JOptionPane.showMessageDialog(null,"This room name is already in use.", "", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void joinFailed(){
+        JOptionPane.showMessageDialog(null,"This room does not exist.", "", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void roomOnList(){
+        JOptionPane.showMessageDialog(null,"You already have this room on your list.", "", JOptionPane.PLAIN_MESSAGE);
+    }
 }

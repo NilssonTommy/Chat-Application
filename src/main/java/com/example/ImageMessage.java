@@ -1,6 +1,5 @@
 package com.example;
 import java.sql.Timestamp;
-import java.awt.*;
 
 public class ImageMessage implements Message {
     private String author;

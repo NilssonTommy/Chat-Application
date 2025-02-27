@@ -1,6 +1,5 @@
 package com.example;
 
-import java.util.*;
 public class MessageHandler {
     private PortalConnection pc;
     public MessageHandler(){
@@ -14,11 +13,7 @@ public class MessageHandler {
             ImageMessage image = (ImageMessage)msg;
             pc.addImgMsg(image.getAuthor(), image.getContent(), image.getTimestamp(), image.getChatroom());
         }
-        for(UserInterface user: getUsers(msg.getChatroom())){
-            Broadcaster.getInstance().getObservable().notify(user.getUsername(), msg);
-        }
-    }
-    private List<UserInterface> getUsers(String chatroom){
-        return pc.UserList(chatroom);
+        System.out.println(msg.getChatroom());
+        Broadcaster.getInstance().getObservable().notify(msg.getChatroom(), msg);
     }
 }
