@@ -12,7 +12,7 @@ public class MessageHandler {
             pc.addMsg(textmsg.getAuthor(),textmsg.getContent(), textmsg.getTimestamp(), textmsg.getChatroom());
         } else if (msg instanceof ImageMessage){
             ImageMessage image = (ImageMessage)msg;
-            //behöver en till metod för att lägga till imagemessages.
+            pc.addImgMsg(image.getAuthor(), image.getContent(), image.getTimestamp(), image.getChatroom());
         }
         for(UserInterface user: getUsers(msg.getChatroom())){
             Broadcaster.getInstance().getObservable().notify(user.getUsername(), msg);

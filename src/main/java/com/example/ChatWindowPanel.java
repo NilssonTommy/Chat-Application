@@ -31,10 +31,10 @@ public class ChatWindowPanel extends JPanel implements Observer{
                     for(Message m: chatlog.getHistory()){
                         if (m instanceof TextMessage){
                             panel = new TextPanel(((TextMessage)m)); 
-                            add(panel);
+                            add(panel, maingbc);
                         } else if (m instanceof ImageMessage){
                             panel = new ImagePanel(((ImageMessage)m),getWidth());
-                            add(panel);
+                            add(panel, maingbc);
                         }
                         add(invisiblepanel, invisiblegbc);
                         SwingUtilities.invokeLater(() -> {
