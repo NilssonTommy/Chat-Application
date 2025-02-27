@@ -33,8 +33,9 @@ public class RoomHandler {
             break;
 
             case SELECT: //Open a chatroom
-            //model.setUserlist(pc.getUserList());
-            //model.updateChatLog(pc.getChatLog(model.getRoomName()));
+            model.setUsers(pc.UserList(model.getRoomName()));
+            model.getChatLog().setHistory(pc.getChatLog(model.getRoomName()));
+            
         }
         return model;
     }

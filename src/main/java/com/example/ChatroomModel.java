@@ -39,6 +39,10 @@ public class ChatroomModel implements ChatroomInterface{
         this.roomName = roomName;
         this.status = false;
         this.action = action;
+        this.chathistory = new ChatHistory(roomName);
+        this.obschat = new Observable();
+        this.obsuser = new Observable();
+        this.users = new LinkedList<>();
     }
 
     /**

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.*;
 
 public class UserWindowPanel extends JPanel implements Observer{
-    private List<String> users;
     private JLabel invisisblelabel;
     private GridBagConstraints maingbc, invisiblegbc;
     public UserWindowPanel(){
@@ -22,18 +21,27 @@ public class UserWindowPanel extends JPanel implements Observer{
     }
     public void update(Object obj){
         if(obj instanceof List){
-            @SuppressWarnings("unchecked")
-            List<String> users = (List<String>)obj;
-            removeAll();
-            for(String u : users){
-                add(new JLabel(u), maingbc);
+            List<?> list = (List<?>)obj;
+            if(!list.isEmpty()){
+                if(list.get(0) instanceof UserInterface){
+                    @SuppressWarnings("unchecked")
+                    List<UserInterface> users = (List<UserInterface>)list;
+                    removeAll();
+                    for(UserInterface u : users){
+                        add(new JLabel(u.getUsername()), maingbc);
+                    }
+                    add(invisisblelabel, invisiblegbc);
+                    revalidate();
+                } else {
+                    System.out.println("List submitted to UserWindowPanel does not consist of UserInterface");
+                }
             }
-            add(invisisblelabel, invisiblegbc);
-            revalidate();
-        } else if (obj instanceof String){
-            String name = (String)obj;
+            
+            
+        } else if (obj instanceof UserInterface){
+            UserInterface user = (UserInterface)obj;
             remove(invisisblelabel);
-            add(new JLabel(name), maingbc);
+            add(new JLabel(user.getUsername()), maingbc);
             add(invisisblelabel, invisiblegbc);
             revalidate();
         }

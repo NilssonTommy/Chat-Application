@@ -1,5 +1,6 @@
 package com.example;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import javax.imageio.ImageIO; // Handling of images.
@@ -30,7 +31,7 @@ public class ChatroomController{
         this.username = username;
 
         // Create the ChatroomModel (which handles ClientNetwork communication)
-        this.chatroomModel = new ChatroomModel(roomName);
+        this.chatroomModel = new ChatroomModel(username, roomName, UserAction.SELECT);
         ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         // Create a Builder and Director
@@ -78,14 +79,28 @@ public class ChatroomController{
         
         if (returnValue == JFileChooser.APPROVE_OPTION) { // If a file is chosen
             File selectedFile = fc.getSelectedFile(); // Get selected file
+
             try {
                 BufferedImage img = ImageIO.read(selectedFile);
-                clientNetwork.sendMessage(new ImageMessage(username, roomName, img)); // Send the image via the ClientNetwork.
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(img, getFileExtension(selectedFile.getName()), baos);
+                byte[] bytes = baos.toByteArray();
+                clientNetwork.sendMessage(new ImageMessage(username, roomName, bytes)); // Send the image via the ClientNetwork.
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
             }
             System.out.println("Image selected: " + selectedFile.getAbsolutePath()); // Debug
         }
+    }
+    private String getFileExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int dotIndex = filename.lastIndexOf(".");
+        if (dotIndex >= 0) {
+            return filename.substring(dotIndex + 1);
+        }
+        return "";
     }
 }
 

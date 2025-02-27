@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Timestamp;
+import java.sql.Timestamp;// JDBC stuff.
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -159,30 +159,41 @@ public class PortalConnection {
     }
     
         
-    public List<String> getChatLog(String roomName) {
-        List<String> chatLogs = new ArrayList<>();
-        String sql = "SELECT MsgUser, Msg, TimeMsg FROM Message WHERE RoomName = ? ORDER BY TimeMsg ASC";
+    public List<Message> getChatLog(String roomName) {
+        List<Message> chatLogs = new ArrayList<>();
+        String sql = "SELECT MsgUser, Msg, NULL AS ImageData, timeMsg FROM Message WHERE RoomName = ? " +
+            "UNION ALL " +
+            "SELECT MsgUser, NULL AS Msg, ImageData, timeMsg FROM MsgImage WHERE RoomName = ? " +
+            "ORDER BY timeMsg ASC";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomName); // Set roomName parameter
-    
+            ps.setString(2, roomName);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String username = rs.getString("MsgUser"); 
+                    String username = rs.getString("MsgUser");
+                    byte[] bytes = rs.getBytes("ImageData");  
                     String message = rs.getString("Msg");      
                     Timestamp timestamp = rs.getTimestamp("TimeMsg");
-    
-                    // Format: [timestamp] username: message
-                    String formattedMessage = "[" + timestamp + "] " + username + ": " + message + "\n";
-                    chatLogs.add(formattedMessage);
+                    if(bytes == null){
+                        Message msg = new TextMessage(username, roomName, message, timestamp);
+                        chatLogs.add(msg);
+                        System.out.println(message);
+                    } else if (message == null){
+                        Message msg = new ImageMessage(username, roomName, bytes, timestamp);
+                        chatLogs.add(msg);
+                        System.out.println(bytes);
+                    }  
                 }
             }
         } catch (SQLException e) {
             System.out.println("Failed to fetch chat logs.");
             e.printStackTrace();
         }
+        System.out.println(chatLogs.get(0));
         return chatLogs;
     }
+
 
     public List<UserInterface> UserList(String roomName) {
         List<UserInterface> userList = new ArrayList<>();
@@ -211,6 +222,29 @@ public class PortalConnection {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username); 
             ps.setString(2, message);
+            ps.setTimestamp(3, timeMessage);
+            ps.setString(4, RoomName);
+            int added = ps.executeUpdate();  // Execute the query
+
+            if (added > 0) {
+                System.out.println("Message added successfully");
+                return true;
+            } else {
+                System.out.println("Failed to add message");
+                return false;
+            }    
+        } catch (SQLException e) {
+            System.out.println("Failed to create message, database error");
+            e.printStackTrace();  // Print error details
+            return false;  // Return false if an error occurs
+        }
+    } 
+
+    public boolean addImgMsg(String username, byte[] img, Timestamp timeMessage, String RoomName) {
+        String sql = "INSERT INTO MsgImage(MsgUser, ImageData, timeMsg, RoomName) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username); 
+            ps.setBytes(2, img);
             ps.setTimestamp(3, timeMessage);
             ps.setString(4, RoomName);
             int added = ps.executeUpdate();  // Execute the query

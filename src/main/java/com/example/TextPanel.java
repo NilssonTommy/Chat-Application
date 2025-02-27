@@ -13,9 +13,14 @@ public class TextPanel extends JPanel {
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        int authorwidth = (g.getFontMetrics()).stringWidth(author + ":");
         stringwidth = (g.getFontMetrics()).stringWidth(text);
         stringheight = (g.getFontMetrics()).getHeight();
-        setPreferredSize(new Dimension(stringwidth + 20,stringheight + 30 + 2*verticalSpace));
+        if((authorwidth> stringwidth+20)){
+            setPreferredSize(new Dimension(authorwidth,stringheight + 30 + 2*verticalSpace));
+        } else {
+            setPreferredSize(new Dimension(stringwidth + 20,stringheight + 30 + 2*verticalSpace));
+        }
         g.setColor(Color.BLACK);
         g.drawString(author + ":", 0, verticalSpace + stringheight);
         g.setColor(Color.LIGHT_GRAY);

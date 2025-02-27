@@ -1,10 +1,5 @@
 package com.example;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Broadcaster {
     private static Broadcaster instance;
     private ObservableMap obsMap;

@@ -1,21 +1,20 @@
 package com.example;
 import java.sql.Timestamp;
-import java.awt.*;
 
 public class ImageMessage implements Message {
     private String author;
     private Timestamp timestamp;
-    private Image img;
+    private byte[] img;
     private String chatroom;
 
-    public ImageMessage(String author, String chatroom, Image img){
-        this.img = img;
+    public ImageMessage(String author, String chatroom, byte[] img){
+        this.img = img.clone();
         timestamp = new Timestamp(System.currentTimeMillis());
         this.author = author;
         this.chatroom = chatroom;
     }
-    public ImageMessage(String author, String chatroom, Image img, Timestamp timestamp){
-        this.img = img;
+    public ImageMessage(String author, String chatroom, byte[] img, Timestamp timestamp){
+        this.img = img.clone();
         this.timestamp = timestamp;
         this.author = author;
         this.chatroom = chatroom;
@@ -31,11 +30,11 @@ public class ImageMessage implements Message {
         return timestamp;
     }
 
-    public Image getContent(){
+    public byte[] getContent(){
         return img;
     }
-    public void setContent(Image img){
-        this.img = img;
+    public void setContent(byte[] img){
+        this.img = img.clone();
     }
     public String getChatroom(){
         return chatroom;

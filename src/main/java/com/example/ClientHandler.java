@@ -20,9 +20,6 @@ public class ClientHandler implements Visitor, Observer{
     public void visit(UserRequest user) {
 
         UserInterface userResponse = loginHandler.checkUsername(user);
-        if(userResponse.getStatus()){
-            Broadcaster.getInstance().getObservable().addSubscriber(userResponse.getUsername(), this);
-        }
         try{
         oos.writeObject(userResponse);
         oos.flush();
@@ -38,6 +35,9 @@ public class ClientHandler implements Visitor, Observer{
     @Override
     public void visit(ChatroomInterface chatroomModel) {
         ChatroomInterface returnModel = roomHandler.clientRequest(chatroomModel);
+        if(chatroomModel.getAction() == UserAction.SELECT){
+            Broadcaster.getInstance().getObservable().addSubscriber(chatroomModel.getRoomName(), this);
+        }
         try{
         oos.writeObject(returnModel);
         oos.flush();
@@ -48,6 +48,7 @@ public class ClientHandler implements Visitor, Observer{
 
     public void update(Object obj){
         try {
+            System.out.println("Broadcasting for chatroom");
             oos.writeObject(obj);
             oos.flush();
         } catch (IOException e) {

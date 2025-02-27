@@ -1,25 +1,35 @@
 package com.example;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel{
-    private Image img;
+    private BufferedImage img;
     private String author;
     private int stringheight, imgWidth, imgHeight, width, height;
     private float imgRatio;
     private int verticalSpace = 5;
     public ImagePanel(ImageMessage msg, int parentwidth){
-        this.img = msg.getContent();
-        imgWidth = img.getWidth(null);
-        imgHeight = img.getHeight(null);
-        imgRatio = ((float)imgWidth)/((float)imgHeight);
-        if(imgWidth >= (parentwidth-60)){
-            width = parentwidth-60;
-            height = (int)(((float)width)/imgRatio);
-        } else {
-            width = imgWidth;
-            height = imgHeight;
+        try {
+            this.img = ImageIO.read(new ByteArrayInputStream(msg.getContent()));
+            imgWidth = img.getWidth(null);
+            imgHeight = img.getHeight(null);
+            imgRatio = ((float)imgWidth)/((float)imgHeight);
+            this.author = msg.getAuthor();
+            if(imgWidth >= (parentwidth-60)){
+                width = parentwidth-60;
+                height = (int)(((float)width)/imgRatio);
+            } else {
+                width = imgWidth;
+                height = imgHeight;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public void paintComponent(Graphics g){
