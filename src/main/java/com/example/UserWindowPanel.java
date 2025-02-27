@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.*;
 
 public class UserWindowPanel extends JPanel implements Observer{
-    private JLabel invisisblelabel;
+    private JLabel invisiblelabel;
     private GridBagConstraints maingbc, invisiblegbc;
     public UserWindowPanel(){
         setLayout(new GridBagLayout());
@@ -15,9 +15,9 @@ public class UserWindowPanel extends JPanel implements Observer{
         maingbc.anchor = GridBagConstraints.WEST;
         maingbc.gridwidth = GridBagConstraints.REMAINDER;
         invisiblegbc.weighty = 1;
-        invisisblelabel = new JLabel();
-        invisisblelabel.setPreferredSize(new Dimension(50,10));
-        add(invisisblelabel);
+        invisiblelabel = new JLabel();
+        invisiblelabel.setPreferredSize(new Dimension(50,10));
+        add(invisiblelabel);
     }
     public void update(Object obj){
         if(obj instanceof List){
@@ -30,7 +30,7 @@ public class UserWindowPanel extends JPanel implements Observer{
                     for(UserInterface u : users){
                         add(new JLabel(u.getUsername()), maingbc);
                     }
-                    add(invisisblelabel, invisiblegbc);
+                    add(invisiblelabel, invisiblegbc);
                     revalidate();
                 } else {
                     System.out.println("List submitted to UserWindowPanel does not consist of UserInterface");
@@ -40,9 +40,9 @@ public class UserWindowPanel extends JPanel implements Observer{
             
         } else if (obj instanceof UserInterface){
             UserInterface user = (UserInterface)obj;
-            remove(invisisblelabel);
+            remove(invisiblelabel);
             add(new JLabel(user.getUsername()), maingbc);
-            add(invisisblelabel, invisiblegbc);
+            add(invisiblelabel, invisiblegbc);
             revalidate();
         }
     }

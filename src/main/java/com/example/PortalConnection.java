@@ -13,9 +13,9 @@ import java.util.Properties;
 public class PortalConnection {
     private static PortalConnection instance;
 
-    static final String DBNAME = "chat";
+    static final String DBNAME = "postgres";
     static final String DATABASE = "jdbc:postgresql://localhost/"+DBNAME;
-    static final String USERNAME = "patrick";
+    static final String USERNAME = "postgres";
     static final String PASSWORD = "";
 
 
