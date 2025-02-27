@@ -10,7 +10,6 @@ public class LoginHandler {
         this.pc = PortalConnection.getInstance();
     }
 
-    /* Verify username */
     public UserInterface checkUsername(UserRequest user) {
         UserResponse userResponse = new UserResponse(user.getUsername(), false, user.getAction(), new ArrayList<String>());
 

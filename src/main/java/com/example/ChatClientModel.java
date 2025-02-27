@@ -1,11 +1,10 @@
 package com.example;
+
 import java.util.List;
 
 public class ChatClientModel implements ChatClientInterface {
     private UserInterface user;
     private List<String> chatrooms;
-
- 
 
     public ChatClientModel(UserInterface user){
         this.user = user;

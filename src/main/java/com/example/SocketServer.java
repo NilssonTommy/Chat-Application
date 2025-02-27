@@ -7,8 +7,9 @@ import java.net.Socket;
 
 public class SocketServer {
     public SocketServer(){
+        ServerSocket ss = null;
         try {
-            ServerSocket ss = new ServerSocket(6666);
+            ss = new ServerSocket(6666);
             System.out.println("Waiting for a client connection request...");   
             while(true) {
                 Socket s = ss.accept();
@@ -17,17 +18,27 @@ public class SocketServer {
                 ServerRunnable serverRunnable = new ServerRunnable(s);
                 new Thread(serverRunnable).start();
             }
-
-            // ss.close();
-
         } catch (Exception e) {
             System.out.println(e);
+        }finally {
+            if (ss != null) {
+                try {
+                    ss.close();
+                    System.out.println("ServerSocket closed.");
+                } catch (Exception e) {
+                    System.out.println("Error closing ServerSocket: " + e);
+                }
+            }
         }
     }
-
+    
     public static void main(String[] args) {
-        // Starts the Serversocket
         new SocketServer();
     }
-        
 }
+
+
+
+
+
+

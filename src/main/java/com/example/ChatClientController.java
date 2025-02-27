@@ -1,4 +1,5 @@
 package com.example;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -9,9 +10,9 @@ import javax.swing.JOptionPane;
  */
 public class ChatClientController implements Observer {
     
-    private ChatClientModel chatClientModel; // Stores user-related data.
-    private ChatClientGUI chatClientGUI; // User interface after login.
-    private ClientNetwork clientNetwork; // The singleton instance of ClientNetwork.
+    private ChatClientModel chatClientModel;
+    private ChatClientGUI chatClientGUI;
+    private ClientNetwork clientNetwork;
     private UserResponse user;
     private String roomName;
  
@@ -23,7 +24,7 @@ public class ChatClientController implements Observer {
      */
     public ChatClientController(UserResponse user) {
         this.user = user;
-        this.clientNetwork = ClientNetwork.getInstance(); // Get the singleton instance of ClientNetwork.
+        this.clientNetwork = ClientNetwork.getInstance();
         initObservable();
         this.chatClientModel = new ChatClientModel(user);
         this.chatClientGUI = new ChatClientGUI(chatClientModel);
@@ -38,8 +39,6 @@ public class ChatClientController implements Observer {
         chatClientGUI.addCreateRoomListener(listener -> {
             String roomName = JOptionPane.showInputDialog("Enter room name");
             System.out.println("Creating room: " + roomName);
-           // chatClientModel.addChatroom(roomName);   
-            //chatClientGUI.updateRoomList();
             System.out.println(roomName);
             createRoom(roomName);
 
@@ -69,14 +68,11 @@ private void joinRoomListener(){
     });
 }
 
-
     private void addRoomListener(){
         chatClientGUI.addAddRoomListener(listener -> {
             roomName = JOptionPane.showInputDialog("Enter room name");
             System.out.println("Adding room: " + roomName);
             joinRoom(roomName);
-           // chatClientModel.addChatroom(roomName);   
-            //chatClientGUI.updateRoomList();
         });
     }
 
@@ -88,10 +84,10 @@ private void joinRoomListener(){
      */
     private void onRoomSelected(String roomName) {
         if (chatClientModel.getChatrooms().contains(roomName)) {
-            System.out.println("Joining chatroom: " + roomName); // Debug
-            new ChatroomController(roomName, user.getUsername()); // Initialize ChatroomController
+            System.out.println("Joining chatroom: " + roomName);
+            new ChatroomController(roomName, user.getUsername());
         } else {
-            System.out.println("Error: Chatroom '" + roomName + "' does not exist."); // Debug
+            System.out.println("Error: Chatroom '" + roomName + "' does not exist.");
         }
     }
     
@@ -105,7 +101,7 @@ private void joinRoomListener(){
                 clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.CREATE));
             }
         } else {
-            System.out.println("Chatroom '" + roomName + "' already exists."); // Debug
+            System.out.println("Chatroom '" + roomName + "' already exists.");
             createFailed();
         }
     }
@@ -116,7 +112,7 @@ private void joinRoomListener(){
                 clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.JOIN));
             }
         } else {
-            System.out.println("Chatroom '" + roomName + "' already exists in your list."); // Debug
+            System.out.println("Chatroom '" + roomName + "' already exists in your list.");
             roomOnList();
         }
     }
@@ -151,31 +147,6 @@ private void joinRoomListener(){
                 break;
        }
     }
-        /* 
-        if (obj instanceof List<?>) { // Check if object is a list.
-            List<?> rawList = (List<?>) obj;
-
-            // Ensure all elements are strings
-            boolean allStrings = rawList.stream().allMatch(e -> e instanceof String);
-            
-            if (allStrings) {
-                @SuppressWarnings("unchecked")
-                List<String> chatrooms = (List<String>) rawList;
-                
-                chatClientModel.setChatrooms(chatrooms); // Update model
-
-                System.out.println("Updated chatrooms: " + chatrooms); // Debug
-
-                // Refresh the GUI once implemented
-                if (chatClientGUI != null) {
-                    // chatClientGUI.refresh(); // Uncomment once implemented
-                }
-            } else {
-                System.out.println("Received a list, but not of type List<String>"); // Debug
-            }
-        } else {
-            System.out.println("Received an update that is not a list"); // Debug
-        }*/
  }
 
     private void initObservable(){

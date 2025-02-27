@@ -9,8 +9,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-//Kommer att fixa design på layout nu så det ser snyggare ut
-
 public class RegisterWindow extends JFrame {
     private JButton RegisterButton;
     private JTextField username;
@@ -20,7 +18,7 @@ public class RegisterWindow extends JFrame {
         setTitle("Register");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-        setLocationRelativeTo(null); // Center window on screen
+        setLocationRelativeTo(null);
         setResizable(false);
 
         JPanel login = new JPanel();

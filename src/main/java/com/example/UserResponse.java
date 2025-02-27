@@ -16,11 +16,6 @@ public class UserResponse implements UserInterface, Serializable {
         this.status = status;
         this.action = action;
         this.roomList = new ArrayList<String> (roomList);
-        // private String firstName;
-        // private String lastName;
-        // private String birthDay;
-        // private String city;
-        // private String eMail;
     }
 
     public UserResponse(String name, Boolean status, UserAction action) {

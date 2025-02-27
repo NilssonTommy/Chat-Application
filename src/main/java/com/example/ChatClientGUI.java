@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -18,8 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionListener;
-
-
 
 public class ChatClientGUI extends JFrame {
 
@@ -51,28 +48,20 @@ public class ChatClientGUI extends JFrame {
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        // Sätt en finare font för listan
         roomList.setFont(new Font("Serif", Font.PLAIN, 24));
         roomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     
-
-        // Centrera texten i listan
         DefaultListCellRenderer renderer = (DefaultListCellRenderer)roomList.getCellRenderer();
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Lägg listan i en JScrollPane
         JScrollPane scrollPane = new JScrollPane(roomList);
-        // Sätt en rimlig storlek så att den inte fyller hela mitten
         scrollPane.setPreferredSize(new Dimension(300, 200));
 
-        // För att verkligen centrera scrollPane kan vi använda en panel med t.ex. GridBagLayout
         JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.add(scrollPane); // GridBagLayout lägger scrollPane i mitten som standard
+        centerPanel.add(scrollPane);
 
-        // Lägg centerPanel i mitten av BorderLayout
         contentPane.add(centerPanel, BorderLayout.CENTER);
 
-        // Lägg knapparna i en panel längst ned
         JPanel buttonPanel = new JPanel();
 
         joinButton = new JButton("Join Room");
@@ -104,7 +93,6 @@ public class ChatClientGUI extends JFrame {
         addButton.addActionListener(listener);
     }
 
-
     void addRoomSelectionListener(ListSelectionListener listener){
         roomList.addListSelectionListener(listener);
     }
@@ -116,7 +104,6 @@ public class ChatClientGUI extends JFrame {
         for (String room : chatrooms) {
             listModel.addElement(room);
         }
-    
         revalidate(); 
     }
 

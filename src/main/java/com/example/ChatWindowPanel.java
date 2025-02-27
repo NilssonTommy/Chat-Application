@@ -1,7 +1,6 @@
 package com.example;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.*;
 
 public class ChatWindowPanel extends JPanel implements Observer{
@@ -26,7 +25,6 @@ public class ChatWindowPanel extends JPanel implements Observer{
             removeAll();
             for(Message m: chatlog.getHistory()){
                 try {
-                    //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
                     SwingUtilities.invokeAndWait(()->{
                         if (m instanceof TextMessage){
                             panel = new TextPanel(((TextMessage)m)); 
@@ -51,7 +49,6 @@ public class ChatWindowPanel extends JPanel implements Observer{
             });
         } else if(obj instanceof Message){
             try {
-                //InvokeAndWait is used to ensure that the panels are drawn before the view is revalidated
                 SwingUtilities.invokeAndWait(()->{
                     msg = (Message)obj;
                     remove(invisiblepanel);
