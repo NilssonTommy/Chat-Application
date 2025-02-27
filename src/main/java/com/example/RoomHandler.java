@@ -12,7 +12,7 @@ public class RoomHandler {
         switch(model.getAction()){
 
             case CREATE:
-            if(pc.createRoom(model.getUsername(),  model.getRoomName())){
+            if(pc.createRoom(model.getUser().getUsername(),  model.getRoomName())){
 
                 model.setStatus(true);
             }
