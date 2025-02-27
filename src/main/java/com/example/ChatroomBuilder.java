@@ -1,4 +1,5 @@
 package com.example;
+
 import javax.swing.*;
 
 public interface ChatroomBuilder {
@@ -9,5 +10,6 @@ public interface ChatroomBuilder {
     void createImagebutton(JButton imagebutton);
     void createUserWindow(UserWindowPanel userwindow);
     void createUserScroll(JScrollPane userscroll);
+    
     ChatroomGUI getResult();
 }

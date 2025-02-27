@@ -1,11 +1,11 @@
 package com.example;
-import java.sql.Connection; // JDBC stuff.
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Timestamp;// JDBC stuff.
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -13,24 +13,18 @@ import java.util.Properties;
 public class PortalConnection {
     private static PortalConnection instance;
 
-
-    // Set this to e.g. "portal" if you have created a database named portal
-    // Leave it blank to use the default database of your database user
-    static final String DBNAME = "postgres";
-    // For connecting to the portal database on your local machine
+    static final String DBNAME = "chat";
     static final String DATABASE = "jdbc:postgresql://localhost/"+DBNAME;
-    static final String USERNAME = "postgres";
-    static final String PASSWORD = "postgres";
+    static final String USERNAME = "patrick";
+    static final String PASSWORD = "";
 
-    // This is the JDBC connection object you will be using in your methods.
+
     private Connection conn;
-
 
     public PortalConnection() throws SQLException, ClassNotFoundException {
         this(DATABASE, USERNAME, PASSWORD);  
     }
 
-    // Initializes the connection, no need to change anything here
     public PortalConnection(String db, String user, String pwd) throws SQLException, ClassNotFoundException {
         Class.forName("org.postgresql.Driver");
         Properties props = new Properties();
@@ -68,7 +62,7 @@ public class PortalConnection {
                 System.out.println("User created successfully.");
                 return true;
             }
-        } catch (SQLIntegrityConstraintViolationException e) {  // Catch duplicate username error
+        } catch (SQLIntegrityConstraintViolationException e) {
             System.out.println("User already exists.");
         } catch (SQLException e) {
             System.out.println("Error inserting user.");
@@ -89,8 +83,8 @@ public class PortalConnection {
             return deleted > 0; 
         } catch (SQLException e) {
             System.out.println("Failed to delete");
-            e.printStackTrace();  // Print error details
-            return false;  // Return false if an error occurs
+            e.printStackTrace();
+            return false;
         }
     }
      
@@ -104,7 +98,7 @@ public class PortalConnection {
     
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Room already exists");
-                return false; // Rummet finns redan, så vi skapar det inte igen
+                return false;
             }
     
             try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
@@ -143,7 +137,7 @@ public class PortalConnection {
         String sql = "SELECT RoomName FROM Rooms WHERE Rooms.UserID = ? ORDER BY RoomName";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username); // Set roomName parameter
+            ps.setString(1, username);
     
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -167,7 +161,7 @@ public class PortalConnection {
             "ORDER BY timeMsg ASC";
         System.out.println("Trying to fetch " + roomName);
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomName); // Set roomName parameter
+            ps.setString(1, roomName);
             ps.setString(2, roomName);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -200,7 +194,7 @@ public class PortalConnection {
         String sql = "SELECT UserID FROM Rooms WHERE RoomName = ? ORDER BY UserID";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomName); // Set roomName parameter
+            ps.setString(1, roomName);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -224,7 +218,7 @@ public class PortalConnection {
             ps.setString(2, message);
             ps.setTimestamp(3, timeMessage);
             ps.setString(4, RoomName);
-            int added = ps.executeUpdate();  // Execute the query
+            int added = ps.executeUpdate();
 
             if (added > 0) {
                 System.out.println("Message added successfully");
@@ -235,8 +229,8 @@ public class PortalConnection {
             }    
         } catch (SQLException e) {
             System.out.println("Failed to create message, database error");
-            e.printStackTrace();  // Print error details
-            return false;  // Return false if an error occurs
+            e.printStackTrace();
+            return false;
         }
     } 
 
@@ -247,7 +241,7 @@ public class PortalConnection {
             ps.setBytes(2, img);
             ps.setTimestamp(3, timeMessage);
             ps.setString(4, RoomName);
-            int added = ps.executeUpdate();  // Execute the query
+            int added = ps.executeUpdate();
 
             if (added > 0) {
                 System.out.println("Message added successfully");
@@ -258,8 +252,8 @@ public class PortalConnection {
             }    
         } catch (SQLException e) {
             System.out.println("Failed to create message, database error");
-            e.printStackTrace();  // Print error details
-            return false;  // Return false if an error occurs
+            e.printStackTrace();
+            return false;
         }
     } 
 
@@ -290,7 +284,6 @@ public class PortalConnection {
 
         public Boolean addRoom(String userId, String roomName) {
             try {
-                // Först: Kontrollera om rummet redan finns för det angivna UserID
                 String sqlCheckUser = "SELECT COUNT(*) FROM Rooms WHERE RoomName = ? AND UserID = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlCheckUser)) {
                     ps.setString(1, roomName);
@@ -303,7 +296,6 @@ public class PortalConnection {
                     }
                 }
                 
-                // Sedan: Kontrollera om rummet existerar globalt (oberoende av UserID)
                 String sqlCheckGlobal = "SELECT COUNT(*) FROM Rooms WHERE RoomName = ?";
                 int globalCount = 0;
                 try (PreparedStatement psGlobal = conn.prepareStatement(sqlCheckGlobal)) {
@@ -315,11 +307,9 @@ public class PortalConnection {
                     }
                 }
                 
-                // Om rummet existerar globalt, lägg till det för den angivna användaren
                 if (globalCount > 0) {
                     String sqlInsert = "INSERT INTO Rooms (UserID, RoomName) VALUES (?, ?)";
                     try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert)) {
-                        // Ändra ordningen här!
                         psInsert.setString(1, userId);
                         psInsert.setString(2, roomName);
                         psInsert.executeUpdate();

@@ -1,6 +1,6 @@
 package com.example;
-import javax.swing.*;
 
+import javax.swing.*;
 
 public class BasicChatroomBuilder implements ChatroomBuilder {
     private JScrollPane chatscroller, userscroll;

@@ -7,13 +7,12 @@ public class RoomHandler {
         this.pc = PortalConnection.getInstance();
     }
 
-    /* Verify RoomID */
     public ChatroomInterface clientRequest(ChatroomInterface model) {
 
         switch(model.getAction()){
 
-            case CREATE: //Skapar ett rum
-            if(pc.createRoom(model.getUser().getUsername(),  model.getRoomName())){
+            case CREATE:
+            if(pc.createRoom(model.getUsername(),  model.getRoomName())){
 
                 model.setStatus(true);
             }
@@ -22,7 +21,7 @@ public class RoomHandler {
             }
             break;
 
-            case JOIN: //Lägger till rum i ChatClient listan
+            case JOIN:
             if(pc.addRoom(model.getUser().getUsername(), model.getRoomName())){
                 Broadcaster.getInstance().getObservable().notify(model.getRoomName(), new ChatroomModel(model.getUser(), model.getRoomName(), UserAction.NOTIFY));
                 model.setStatus(true);
@@ -32,7 +31,7 @@ public class RoomHandler {
             }
             break;
 
-            case SELECT: //Open a chatroom
+            case SELECT:
             model.setUsers(pc.UserList(model.getRoomName()));
             model.getChatLog().setHistory(pc.getChatLog(model.getRoomName()));
             break;

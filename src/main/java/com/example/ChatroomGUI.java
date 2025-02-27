@@ -21,7 +21,6 @@ public class ChatroomGUI extends JFrame{
         this.sendbutton = sendbutton;
         this.imagebutton = imagebutton;
         this.textfield = textfield;
-        //Kanske får lägga detta i builder istället
         bottompanel = new JPanel();
         setupFrame();
         setupListeners();
@@ -62,7 +61,6 @@ public class ChatroomGUI extends JFrame{
                   
             }
         });
-        //Actionlistener in order to send Message using "ENTER"
         textfield.addActionListener(e->{
             sendbutton.doClick();
         });
