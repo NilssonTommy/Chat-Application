@@ -1,9 +1,17 @@
 package com.example;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.sql.*; // JDBC stuff.
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import java.awt.*;
+
 
 public class PortalConnection {
     private static PortalConnection instance;
@@ -144,30 +152,47 @@ public class PortalConnection {
     }
     
         
-    public List<String> getChatLog(String roomName) {
-        List<String> chatLogs = new ArrayList<>();
-        String sql = "SELECT MsgUser, Msg, TimeMsg FROM Message WHERE RoomName = ? ORDER BY TimeMsg ASC";
+    public List<Message> getChatLog(String roomName) {
+        List<Message> chatLogs = new ArrayList<>();
+    
+        // Single query to get both text and image messages, ordered by timeMsg
+        String sql = 
+            "SELECT MsgUser, Msg, NULL AS ImageData, timeMsg FROM Message WHERE RoomName = ? " +
+            "UNION ALL " +
+            "SELECT MsgUser, NULL AS Msg, ImageData, timeMsg FROM MsgImage WHERE RoomName = ? " +
+            "ORDER BY timeMsg ASC";
     
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomName); // Set roomName parameter
+            ps.setString(1, roomName);
+            ps.setString(2, roomName);
     
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String username = rs.getString("MsgUser"); 
-                    String message = rs.getString("Msg");      
-                    Timestamp timestamp = rs.getTimestamp("TimeMsg");
+                    String username = rs.getString("MsgUser");
+                    String message = rs.getString("Msg"); // Will be NULL for images
+                    byte[] imageData = rs.getBytes("ImageData"); // Will be NULL for text messages
+                    Timestamp timestamp = rs.getTimestamp("timeMsg");
     
-                    // Format: [timestamp] username: message
-                    String formattedMessage = "[" + timestamp + "] " + username + ": " + message + "\n";
-                    chatLogs.add(formattedMessage);
+                    // If it's a text message
+                    if (message != null) {
+                        chatLogs.add(new TextMessage(username, roomName, message, timestamp));
+                    } 
+                    // If it's an image message
+                    else if (imageData != null) {
+                        Image img = new ImageIcon(imageData).getImage();
+                        chatLogs.add(new ImageMessage(username, roomName, img, timestamp));
+                    }
                 }
             }
         } catch (SQLException e) {
             System.out.println("Failed to fetch chat logs.");
             e.printStackTrace();
         }
+    
         return chatLogs;
     }
+    
+    
 
     public List<String> UserList(String roomName) {
         List<String> userList = new ArrayList<>();
@@ -209,6 +234,32 @@ public class PortalConnection {
             }    
         } catch (SQLException e) {
             System.out.println("Failed to create message, database error");
+            e.printStackTrace();  // Print error details
+            return false;  // Return false if an error occurs
+        }
+    } 
+
+    public boolean addImgMsg(String username, byte[] imgMsg, Timestamp timeMessage, String RoomName) {
+        String sql = "INSERT INTO MsgImage(MsgUser, ImageData, timeMsg, RoomName) VALUES (?, ?, ?, ?)";
+    
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ByteArrayInputStream imge = new ByteArrayInputStream(imgMsg);
+            ps.setString(1, username); 
+            ps.setBinaryStream(2, imge, imgMsg.length);
+            ps.setTimestamp(3, timeMessage);
+            ps.setString(4, RoomName);
+
+            int added = ps.executeUpdate();  // Execute the query
+
+            if (added > 0) {
+                System.out.println("imageMessage added successfully");
+                return true;
+            } else {
+                System.out.println("Failed to add imageMessage");
+                return false;
+            }    
+        } catch (SQLException e) {
+            System.out.println("Failed to create imageMessage, database error");
             e.printStackTrace();  // Print error details
             return false;  // Return false if an error occurs
         }
