@@ -1,6 +1,6 @@
 package com.example;
-import java.io.IOException;   // Imports I/O Streams classes
-import java.io.ObjectInputStream;  // Imports the socket class
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
@@ -37,7 +37,6 @@ public final class ClientNetwork {
         }catch (Exception e) {System.err.println(e);}
     }
 
-     /* Metod för att välja rum. Vi skriver och flushar */
      public void checkRoom(ChatroomInterface chatroomModel) {
 
         System.out.println("Vi e inne i checkroom ClientNetwork: " + chatroomModel.getRoomName());

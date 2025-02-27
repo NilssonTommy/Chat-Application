@@ -2,18 +2,15 @@ package com.example;
 
 import java.util.*;
 
-
-// TODO: Implement Visitable
-
 /**
  * ChatRoomModel manages the data for a specific chatroom.
  * It handles messages, the user list, and communicates with ClientNetwork.
  * Implements Observable to notify ChatRoomController and GUI about updates.
  */
 public class ChatroomModel implements ChatroomInterface{
-    private String roomName; // Name of the chatroom.
+    private String roomName;
     private ChatHistoryInterface chathistory;
-    private List<UserInterface> users; // List of users in the chatroom.
+    private List<UserInterface> users;
     private Observable obschat, obsuser;
     private UserAction action;
     private Boolean status;

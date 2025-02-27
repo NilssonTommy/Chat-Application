@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/* Receives input from client and sends ... */
 public class ServerRunnable implements Runnable {
 
     private Socket s;
@@ -35,17 +34,4 @@ public class ServerRunnable implements Runnable {
                 System.out.println("Client disconnected");
             }
         }
-    
-
-    /*{
-        try (DataInputStream dis = new DataInputStream(s.getInputStream())) {
-            while (true) {
-                String str = (String) dis.readUTF();
-                System.out.println("message= " + str);
-            }
-        } catch (IOException e) {
-            System.out.println("Client disconnected");
-        }
-    }*/
-
 }

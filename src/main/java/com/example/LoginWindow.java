@@ -5,7 +5,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.Cursor;
 
-//Kommer att fixa design på layout nu så det ser snyggare ut
 
 public class LoginWindow extends JFrame {
     private JButton LoginButton;
@@ -17,7 +16,7 @@ public class LoginWindow extends JFrame {
         setTitle("login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-        setLocationRelativeTo(null); // Center window on screen
+        setLocationRelativeTo(null);
         setResizable(false);
 
         JPanel login = new JPanel();
@@ -32,11 +31,11 @@ public class LoginWindow extends JFrame {
 
         RegisterButton.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    RegisterButton.setForeground(new Color(0, 0, 139)); // Change color when clicked
+                    RegisterButton.setForeground(new Color(0, 0, 139)); 
                 }
 
                 public void mouseReleased(MouseEvent e) {
-                    RegisterButton.setForeground(Color.BLUE); // Change back when released
+                    RegisterButton.setForeground(Color.BLUE);
                 }
             });
 
