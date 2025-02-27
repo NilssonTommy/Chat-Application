@@ -1,5 +1,5 @@
 package com.example;
-import java.io.*;
+import java.io.ObjectInputStream;
 
 public class ClientRunnable implements Runnable {
       
@@ -22,7 +22,12 @@ public class ClientRunnable implements Runnable {
                     System.out.println(((Message)obj).getChatroom() + ": Meddelande mottaget");
                     oMap.notify(((Message)obj).getChatroom(), obj);
                 } else if (obj instanceof ChatroomInterface){
+
+                    if( ((ChatroomModel)obj).getAction() == UserAction.SELECT){
                     oMap.notify(((ChatroomInterface)obj).getRoomName(), obj);
+                    } else {
+                        oMap.notify("chatClientController", obj);
+                    }
                 }
             }
         } catch (Exception e) {

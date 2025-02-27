@@ -2,9 +2,8 @@
 // mvn exec:java -Dexec.mainClass="com.example.SocketServer" 
 
 package com.example;
-import java.io.ObjectOutputStream;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class SocketServer {
     public SocketServer(){

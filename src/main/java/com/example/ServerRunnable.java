@@ -1,7 +1,9 @@
 package com.example;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 /* Receives input from client and sends ... */
 public class ServerRunnable implements Runnable {
@@ -20,7 +22,7 @@ public class ServerRunnable implements Runnable {
             ObjectInputStream ois = new ObjectInputStream(s.getInputStream())
             )
             {
-                ;
+                
                 Visitor visitor = new ClientHandler(oos);
                 while(true) {
                     Object receivedObject = ois.readObject();
