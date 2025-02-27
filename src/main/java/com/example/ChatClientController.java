@@ -61,7 +61,7 @@ private void joinRoomListener(){
     chatClientGUI.addJoinRoomListener(listener -> {
         if (roomName != null) {
             System.out.println("Joining room: " + roomName);
-            new ChatroomController(roomName, user.getUsername());
+            new ChatroomController(roomName, user);
         } else {
             System.out.println("Välj ett rum innan du går med!");
         }
