@@ -165,7 +165,7 @@ public class PortalConnection {
             "UNION ALL " +
             "SELECT MsgUser, NULL AS Msg, ImageData, timeMsg FROM MsgImage WHERE RoomName = ? " +
             "ORDER BY timeMsg ASC";
-    
+        System.out.println("Trying to fetch " + roomName);
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomName); // Set roomName parameter
             ps.setString(2, roomName);
@@ -190,7 +190,7 @@ public class PortalConnection {
             System.out.println("Failed to fetch chat logs.");
             e.printStackTrace();
         }
-        System.out.println(chatLogs.get(0));
+
         return chatLogs;
     }
 
