@@ -93,7 +93,7 @@ public class ChatClientGUI extends JFrame {
         addButton.addActionListener(listener);
     }
 
-    void addRoomSelectionListener(ListSelectionListener listener){
+    public void addRoomSelectionListener(ListSelectionListener listener){
         roomList.addListSelectionListener(listener);
     }
     

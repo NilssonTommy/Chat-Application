@@ -10,9 +10,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class ChatroomController{
-    private ChatroomModel chatroomModel; 
+    private ChatroomModel chatroomModel;
     private String roomName; 
-    private String username; 
+    private UserInterface user; 
     private ChatroomGUI chatroomGUI; 
     private ClientNetwork clientNetwork; 
     private JFileChooser fc; 
@@ -22,11 +22,12 @@ public class ChatroomController{
      * Requests initial data from the ChatroomModel.
      * @param roomName The name of the chatroom.
      */
-    public ChatroomController(String roomName, String username) {
+    public ChatroomController(String roomName, UserInterface user) {
         this.roomName = roomName;
-        this.username = username;
+        this.user = user;
 
-        this.chatroomModel = new ChatroomModel(username, roomName, UserAction.SELECT);
+        this.chatroomModel = new ChatroomModel(user, roomName, UserAction.SELECT);
+
         ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         ChatroomBuilder builder = new BasicChatroomBuilder();
@@ -48,8 +49,8 @@ public class ChatroomController{
 
     private void sendMessage() {
         String messageText = chatroomGUI.getTextfield().getText();
-        if (!messageText.isEmpty()) { 
-            clientNetwork.sendMessage(new TextMessage(username, roomName, messageText));
+        if (!messageText.isEmpty()) {
+            clientNetwork.sendMessage(new TextMessage(user.getUsername(), roomName, messageText));
             chatroomGUI.getTextfield().setText("");
         }
     }
@@ -73,7 +74,7 @@ public class ChatroomController{
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(img, getFileExtension(selectedFile.getName()), baos);
                 byte[] bytes = baos.toByteArray();
-                clientNetwork.sendMessage(new ImageMessage(username, roomName, bytes));
+                clientNetwork.sendMessage(new ImageMessage(user.getUsername(), roomName, bytes));
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
             }

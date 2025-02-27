@@ -37,25 +37,25 @@ public class ChatClientController implements Observer {
 
     private void createRoomListener(){
         chatClientGUI.addCreateRoomListener(listener -> {
-            String roomName = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Creating room: " + roomName);
-            System.out.println(roomName);
-            createRoom(roomName);
+            String room = JOptionPane.showInputDialog("Enter room name");
+            System.out.println("Creating room: " + room);
+            System.out.println(room);
+            createRoom(room);
 
             });
-}
+    }
 
- private void selectRoomListener(){
-    chatClientGUI.addRoomSelectionListener(e -> {
-        String selected = chatClientGUI.getSelectedRoom(); 
-        if (selected != null) {
-            roomName = selected; 
-            System.out.println("Selected room: " + roomName);
-        } else {
-            System.out.println("Inget rum valt.");
-        }
-    });
-}
+    private void selectRoomListener(){
+        chatClientGUI.addRoomSelectionListener(e -> {
+            String selected = chatClientGUI.getSelectedRoom(); 
+            if (selected != null) {
+                roomName = selected; 
+                System.out.println("Selected room: " + roomName);
+            } else {
+                System.out.println("Inget rum valt.");
+            }
+        });
+    }
 
 private void joinRoomListener(){
     chatClientGUI.addJoinRoomListener(listener -> {
@@ -68,51 +68,37 @@ private void joinRoomListener(){
     });
 }
 
+
     private void addRoomListener(){
         chatClientGUI.addAddRoomListener(listener -> {
-            roomName = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Adding room: " + roomName);
-            joinRoom(roomName);
+            String room = JOptionPane.showInputDialog("Enter room name");
+            System.out.println("Adding room: " + room);
+            joinRoom(room);
         });
     }
 
     /**
-     * Manages the user's choice of chatroom.
-     * If the chatroom is in the model's list of chatrooms, 
-     * a ChatRoomController is initialized.
-     * @param roomName The chatroom name of the selected room.
-     */
-    private void onRoomSelected(String roomName) {
-        if (chatClientModel.getChatrooms().contains(roomName)) {
-            System.out.println("Joining chatroom: " + roomName);
-            new ChatroomController(roomName, user.getUsername());
-        } else {
-            System.out.println("Error: Chatroom '" + roomName + "' does not exist.");
-        }
-    }
-    
-    /**
      * Creates a new chatroom and adds it to the model and send it to the server.
-     * @param roomName The chatroom name of the new room.
+     * @param room The chatroom name of the new room.
      */
-    public void createRoom(String roomName) {
-        if (!chatClientModel.getChatrooms().contains(roomName)) { 
+    public void createRoom(String room) {
+        if (!chatClientModel.getChatrooms().contains(room)) { 
             if (clientNetwork != null) {
-                clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.CREATE));
+                clientNetwork.checkRoom(new ChatroomModel(user, room, UserAction.CREATE));
             }
         } else {
-            System.out.println("Chatroom '" + roomName + "' already exists.");
+            System.out.println("Chatroom '" + room + "' already exists."); // Debug
             createFailed();
         }
     }
 
-    public void joinRoom(String roomName) {
-        if (!chatClientModel.getChatrooms().contains(roomName)) { 
+    public void joinRoom(String room) {
+        if (!chatClientModel.getChatrooms().contains(room)) { 
             if (clientNetwork != null) {
-                clientNetwork.checkRoom(new ChatroomModel(user.getUsername(), roomName, UserAction.JOIN));
+                clientNetwork.checkRoom(new ChatroomModel(user, room, UserAction.JOIN));
             }
         } else {
-            System.out.println("Chatroom '" + roomName + "' already exists in your list.");
+            System.out.println("Chatroom '" + room + "' already exists in your list."); // Debug
             roomOnList();
         }
     }

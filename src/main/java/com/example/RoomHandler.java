@@ -22,8 +22,8 @@ public class RoomHandler {
             break;
 
             case JOIN:
-            if(pc.addRoom(model.getUsername(), model.getRoomName())){
-
+            if(pc.addRoom(model.getUser().getUsername(), model.getRoomName())){
+                Broadcaster.getInstance().getObservable().notify(model.getRoomName(), new ChatroomModel(model.getUser(), model.getRoomName(), UserAction.NOTIFY));
                 model.setStatus(true);
             }
             else{
@@ -34,6 +34,7 @@ public class RoomHandler {
             case SELECT:
             model.setUsers(pc.UserList(model.getRoomName()));
             model.getChatLog().setHistory(pc.getChatLog(model.getRoomName()));
+            break;
             
         }
         return model;

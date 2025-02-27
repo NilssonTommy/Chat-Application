@@ -16,16 +16,18 @@ public class ClientRunnable implements Runnable {
         try {
             while (true) {
                 Object obj = ois.readObject();
-                if(obj instanceof UserInterface) {
+                if(obj instanceof UserInterface){
                     oMap.notify("login", obj);
                 } else if (obj instanceof Message){
                     System.out.println(((Message)obj).getChatroom() + ": Meddelande mottaget");
                     oMap.notify(((Message)obj).getChatroom(), obj);
                 } else if (obj instanceof ChatroomInterface){
-
-                    if( ((ChatroomModel)obj).getAction() == UserAction.SELECT){
-                    oMap.notify(((ChatroomInterface)obj).getRoomName(), obj);
-                    } else {
+                    ChatroomInterface model = ((ChatroomModel)obj);
+                    if( model.getAction() == UserAction.SELECT){
+                        oMap.notify(model.getRoomName(), obj);
+                    } else if (((ChatroomModel)obj).getAction() == UserAction.NOTIFY){                        
+                        oMap.notify(model.getRoomName(), model.getUser());
+                    } else{
                         oMap.notify("chatClientController", obj);
                     }
                 }
