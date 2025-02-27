@@ -9,6 +9,6 @@ public interface ChatroomInterface extends Serializable, Visitable, Observer {
     void setChatLog(ChatHistoryInterface chathistory);
     void setUsers(List<UserInterface> users);
     UserAction getAction();
-    String getUsername();
+    UserInterface getUser();
     void setStatus(Boolean b);
 }

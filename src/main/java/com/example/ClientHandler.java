@@ -20,12 +20,7 @@ public class ClientHandler implements Visitor, Observer{
     public void visit(UserRequest user) {
 
         UserInterface userResponse = loginHandler.checkUsername(user);
-        try{
-        oos.writeObject(userResponse);
-        oos.flush();
-        }catch(IOException e){
-            System.err.println("Couldnt write Object");
-        }
+        writeOutputStream(userResponse);
     }
 
     public void visit(Message msg){
@@ -38,17 +33,15 @@ public class ClientHandler implements Visitor, Observer{
         if(chatroomModel.getAction() == UserAction.SELECT){
             Broadcaster.getInstance().getObservable().addSubscriber(chatroomModel.getRoomName(), this);
         }
-        try{
-        oos.writeObject(returnModel);
-        oos.flush();
-        }catch(IOException e){
-            System.err.println("Couldnt write Object");
-        }
+        writeOutputStream(returnModel);
     }
 
     public void update(Object obj){
+        System.out.println("Broadcasting for chatroom");
+        writeOutputStream(obj);
+    }
+    private synchronized void writeOutputStream(Object obj){
         try {
-            System.out.println("Broadcasting for chatroom");
             oos.writeObject(obj);
             oos.flush();
         } catch (IOException e) {

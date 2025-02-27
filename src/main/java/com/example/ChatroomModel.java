@@ -17,7 +17,7 @@ public class ChatroomModel implements ChatroomInterface{
     private Observable obschat, obsuser;
     private UserAction action;
     private Boolean status;
-    private String username;
+    private UserInterface user;
 
 
 
@@ -34,8 +34,8 @@ public class ChatroomModel implements ChatroomInterface{
         this.obsuser = new Observable();
     }
 
-    public ChatroomModel(String username, String roomName, UserAction action){
-        this.username = username;
+    public ChatroomModel(UserInterface user, String roomName, UserAction action){
+        this.user = user;
         this.roomName = roomName;
         this.status = false;
         this.action = action;
@@ -110,8 +110,8 @@ public class ChatroomModel implements ChatroomInterface{
         return action;
     }
 
-    public String getUsername() {
-        return username;
+    public UserInterface getUser() {
+        return user;
     }
 
 

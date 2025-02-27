@@ -5,5 +5,6 @@ public enum UserAction {
     LOGIN,
     CREATE,
     JOIN,
-    SELECT
+    SELECT,
+    NOTIFY
 }

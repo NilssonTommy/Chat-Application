@@ -16,7 +16,7 @@ To ChatroomController -> ClientNetwork
 public class ChatroomController{
     private ChatroomModel chatroomModel; // Handles chat data and communication with ClientNetwork.
     private String roomName; // The name of the chatroom.
-    private String username; // The name of the user which sends a message.
+    private UserInterface user; // The name of the user which sends a message.
     private ChatroomGUI chatroomGUI; // The graphical user interface for the chatroom.
     private ClientNetwork clientNetwork; // Singelton-instance.
     private JFileChooser fc; 
@@ -26,12 +26,12 @@ public class ChatroomController{
      * Requests initial data from the ChatroomModel.
      * @param roomName The name of the chatroom.
      */
-    public ChatroomController(String roomName, String username) {
+    public ChatroomController(String roomName, UserInterface user) {
         this.roomName = roomName;
-        this.username = username;
+        this.user = user;
 
         // Create the ChatroomModel (which handles ClientNetwork communication)
-        this.chatroomModel = new ChatroomModel(username, roomName, UserAction.SELECT);
+        this.chatroomModel = new ChatroomModel(user, roomName, UserAction.SELECT);
         ClientNetwork.getInstance().getClientRunnable().getObservableMap().addSubscriber(roomName, chatroomModel);
 
         // Create a Builder and Director
@@ -61,7 +61,7 @@ public class ChatroomController{
     private void sendMessage() {
         String messageText = chatroomGUI.getTextfield().getText();
         if (!messageText.isEmpty()) { // Ensure the message field is not empty
-            clientNetwork.sendMessage(new TextMessage(username, roomName, messageText)); // Send message via the model.
+            clientNetwork.sendMessage(new TextMessage(user.getUsername(), roomName, messageText)); // Send message via the model.
             chatroomGUI.getTextfield().setText(""); // Clear the text field after sending.
         }
     }
@@ -85,7 +85,7 @@ public class ChatroomController{
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(img, getFileExtension(selectedFile.getName()), baos);
                 byte[] bytes = baos.toByteArray();
-                clientNetwork.sendMessage(new ImageMessage(username, roomName, bytes)); // Send the image via the ClientNetwork.
+                clientNetwork.sendMessage(new ImageMessage(user.getUsername(), roomName, bytes)); // Send the image via the ClientNetwork.
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
             }

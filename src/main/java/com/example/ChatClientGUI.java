@@ -105,7 +105,7 @@ public class ChatClientGUI extends JFrame {
     }
 
 
-    void addRoomSelectionListener(ListSelectionListener listener){
+    public void addRoomSelectionListener(ListSelectionListener listener){
         roomList.addListSelectionListener(listener);
     }
     
