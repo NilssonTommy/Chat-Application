@@ -29,6 +29,12 @@ public class LoginHandler {
                 userResponse.setStatus(false);
             }
                 break;
+            default:
+            try {
+                throw new Exception("UserAction is incorrect");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return userResponse;
     }
