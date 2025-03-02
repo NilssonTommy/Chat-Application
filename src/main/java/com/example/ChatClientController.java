@@ -131,6 +131,12 @@ private void joinRoomListener(){
                     createFailed();
                }
                 break;
+            default:
+            try {
+                throw new Exception("UserAction is incorrect");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
        }
     }
  }

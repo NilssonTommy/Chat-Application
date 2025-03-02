@@ -35,6 +35,13 @@ public class RoomHandler {
             model.setUsers(pc.UserList(model.getRoomName()));
             model.getChatLog().setHistory(pc.getChatLog(model.getRoomName()));
             break;
+
+            default:
+            try {
+                throw new Exception("UserAction is incorrect");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             
         }
         return model;
