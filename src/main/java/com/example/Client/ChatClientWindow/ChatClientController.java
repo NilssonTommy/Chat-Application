@@ -44,8 +44,6 @@ public class ChatClientController implements Observer {
     private void createRoomListener(){
         chatClientGUI.addCreateRoomListener(listener -> {
             String room = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Creating room: " + room);
-            System.out.println(room);
             createRoom(room);
 
             });
@@ -56,7 +54,6 @@ public class ChatClientController implements Observer {
             String selected = chatClientGUI.getSelectedRoom(); 
             if (selected != null) {
                 roomName = selected; 
-                System.out.println("Selected room: " + roomName);
             } else {
                 System.out.println("Inget rum valt.");
             }
@@ -78,7 +75,6 @@ private void joinRoomListener(){
     private void addRoomListener(){
         chatClientGUI.addAddRoomListener(listener -> {
             String room = JOptionPane.showInputDialog("Enter room name");
-            System.out.println("Adding room: " + room);
             joinRoom(room);
         });
     }
@@ -93,7 +89,7 @@ private void joinRoomListener(){
                 clientNetwork.checkRoom(new ChatroomModel(user, room, UserAction.CREATE));
             }
         } else {
-            System.out.println("Chatroom '" + room + "' already exists."); // Debug
+
             createFailed();
         }
     }
@@ -104,7 +100,6 @@ private void joinRoomListener(){
                 clientNetwork.checkRoom(new ChatroomModel(user, room, UserAction.JOIN));
             }
         } else {
-            System.out.println("Chatroom '" + room + "' already exists in your list."); // Debug
             roomOnList();
         }
     }
@@ -117,7 +112,6 @@ private void joinRoomListener(){
     public void update(Object obj) {
         if(obj instanceof ChatroomModel){
         ChatroomModel chatroom = (ChatroomModel) obj;
-        System.out.println("Chatroom: " + chatroom.getRoomName() + " Status: " + chatroom.getStatus());
 
        switch(chatroom.getAction()){
         
