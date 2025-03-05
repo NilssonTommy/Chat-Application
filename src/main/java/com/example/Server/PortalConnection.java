@@ -44,10 +44,8 @@ public class PortalConnection {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
-                    System.out.println("Yes");
                     return true;
                 } else {
-                    System.out.println("no");
                     return false;
                 }
             }
@@ -65,7 +63,6 @@ public class PortalConnection {
             int inserted = insertStmt.executeUpdate();
     
             if (inserted > 0) {
-                System.out.println("User created successfully.");
                 return true;
             }
         } catch (Exception e) {  
@@ -81,7 +78,6 @@ public class PortalConnection {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username); 
             int deleted = ps.executeUpdate(); 
-            System.out.println("Deleted");
     
             return deleted > 0; 
         } catch (SQLException e) {
@@ -249,11 +245,9 @@ public class PortalConnection {
                     if(bytes == null){
                         Message msg = new TextMessage(username, roomName, message, timestamp);
                         chatLogs.add(msg);
-                        System.out.println(message);
                     } else if (message == null){
                         Message msg = new ImageMessage(username, roomName, bytes, timestamp);
                         chatLogs.add(msg);
-                        System.out.println(bytes);
                     }  
                 }
             }

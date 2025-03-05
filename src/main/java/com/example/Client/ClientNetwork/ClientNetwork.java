@@ -29,9 +29,10 @@ public final class ClientNetwork {
 
             new Thread(cR).start();
 
-        } catch (Exception e) {System.err.println(e);}
+        } catch (Exception e) {
+            System.err.println(e);
+        }
 
-        System.err.println("startad");
     }
 
     public void checkUsername(UserInterface user) {
@@ -42,13 +43,12 @@ public final class ClientNetwork {
     }
 
      public void checkRoom(ChatroomInterface chatroomModel) {
-
-        System.out.println("Vi e inne i checkroom ClientNetwork: " + chatroomModel.getRoomName());
-
-        try{
+        try {
             oos.writeObject(chatroomModel);
             oos.flush();
-        }catch (Exception e) {System.err.println(e);}
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
      
 

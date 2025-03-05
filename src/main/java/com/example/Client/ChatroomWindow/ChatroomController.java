@@ -81,7 +81,6 @@ public class ChatroomController{
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Unexpected error...", "Warning", JOptionPane.PLAIN_MESSAGE);
             }
-            System.out.println("Image selected: " + selectedFile.getAbsolutePath());
         }
     }
     
