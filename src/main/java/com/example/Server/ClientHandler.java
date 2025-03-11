@@ -34,6 +34,7 @@ public class ClientHandler implements Visitor, Observer{
     public void visit(ChatroomInterface chatroomModel) {
         ChatroomInterface returnModel = roomHandler.clientRequest(chatroomModel);
         if(chatroomModel.getAction() == UserAction.SELECT){
+            Broadcaster.getInstance().getObservable().removeSubscriber(chatroomModel.getRoomName(), this);
             Broadcaster.getInstance().getObservable().addSubscriber(chatroomModel.getRoomName(), this);
         }
         writeOutputStream(returnModel);
