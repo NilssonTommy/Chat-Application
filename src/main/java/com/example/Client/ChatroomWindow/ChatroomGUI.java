@@ -37,7 +37,9 @@ public class ChatroomGUI extends JFrame{
         setLocationRelativeTo(null);
         setTitle("Chatroom");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
+        //setSize(600, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setMinimumSize(new Dimension(800,600));
         setVisible(true);
     }
     private void setupListeners(){
