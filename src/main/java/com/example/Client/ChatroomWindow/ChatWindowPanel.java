@@ -11,6 +11,7 @@ public class ChatWindowPanel extends JPanel implements Observer{
     private JPanel panel;
     private JPanel invisiblepanel;
     private GridBagConstraints maingbc, invisiblegbc;
+    private Timer timer;
     public ChatWindowPanel(){
         setLayout(new GridBagLayout());
         maingbc = new GridBagConstraints();
@@ -20,6 +21,10 @@ public class ChatWindowPanel extends JPanel implements Observer{
         maingbc.gridwidth = GridBagConstraints.REMAINDER;
         invisiblegbc.weighty = 1;
         invisiblepanel = new JPanel();
+        timer = new Timer(10, e -> {
+            revalidate();
+            timer.stop();
+        });
     }
     public void update(Object obj){
         if (obj instanceof ChatHistoryInterface){
@@ -75,5 +80,7 @@ public class ChatWindowPanel extends JPanel implements Observer{
                 revalidate();
             });
         }
+        
+        timer.start();
     }
 }
