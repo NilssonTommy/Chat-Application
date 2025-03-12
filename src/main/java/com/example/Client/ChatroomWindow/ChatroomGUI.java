@@ -37,7 +37,6 @@ public class ChatroomGUI extends JFrame{
         setLocationRelativeTo(null);
         setTitle("Chatroom");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //setSize(600, 400);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(800,600));
         setVisible(true);
@@ -50,7 +49,6 @@ public class ChatroomGUI extends JFrame{
                     e.getAdjustable().setValue(e.getAdjustable().getMaximum());
                     prevmax_chat = e.getAdjustable().getMaximum();
                 }
-                  
             }
         });
         userscroll.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {  
