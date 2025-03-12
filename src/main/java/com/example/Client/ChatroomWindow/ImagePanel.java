@@ -20,13 +20,20 @@ public class ImagePanel extends JPanel{
             imgHeight = img.getHeight(null);
             imgRatio = ((float)imgWidth)/((float)imgHeight);
             this.author = msg.getAuthor();
-            if(imgWidth >= (parentwidth-60)){
+            if(imgWidth>imgHeight){
+                width = 200;
+                height = (int)(((float)width)/imgRatio);
+            } else {
+                height = 200;
+                width = (int)(((float)height)*imgRatio);
+            }
+/*             if(imgWidth >= (parentwidth-60)){
                 width = parentwidth-60;
                 height = (int)(((float)width)/imgRatio);
             } else {
                 width = imgWidth;
                 height = imgHeight;
-            }
+            } */
         } catch (IOException e) {
             e.printStackTrace();
         }
